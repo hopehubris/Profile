@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing — Ashi Sheth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #F7F6F3;
+      --ink:      #0E0E0E;
+      --muted:    #787570;
+      --rule:     #DEDAD4;
+      --font:     'Zen Kaku Gothic New', sans-serif;
+      --track:    0.12em;
+      --track-lg: 0.18em;
+      --rail-w:   1px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: var(--bg);
+      border-bottom: var(--rail-w) solid var(--rule);
+    }
+    .nav__name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+    }
+    .nav__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav__links a {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav__links a:hover,
+    .nav__links a.active { color: var(--ink); }
+
+    /* Shell */
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
+
+    /* Page header */
+    .page-header {
+      padding: 9rem 0 4rem;
+      border-bottom: var(--rail-w) solid var(--rule);
+      margin-bottom: 0;
+    }
+    .page-header__eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+    .page-header__title {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+    .page-header__desc {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    /* Post list */
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 6rem;
+    }
+    .post-item {
+      display: grid;
+      grid-template-columns: 100px 1fr 200px auto;
+      gap: 0 2.5rem;
+      align-items: baseline;
+      padding: 2rem 0;
+      border-bottom: var(--rail-w) solid var(--rule);
+      transition: padding-left 0.2s;
+    }
+    .post-item:hover { padding-left: 0.5rem; }
+    .post-item__date {
+      font-size: 0.7rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-top: 0.2rem;
+    }
+    .post-item__title {
+      font-size: 1.05rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.4;
+    }
+    .post-item__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: flex-end;
+    }
+    .tag {
+      font-size: 0.62rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+      border: var(--rail-w) solid var(--rule);
+      padding: 0.2rem 0.55rem;
+    }
+    .post-item__arrow { font-size: 0.8rem; color: var(--muted); }
+
+    /* Topic filter */
+    .filter-bar {
+      display: flex;
+      gap: 0;
+      padding: 1.5rem 0;
+      border-bottom: var(--rail-w) solid var(--rule);
+      overflow-x: auto;
+    }
+    .filter-btn {
+      font-size: 0.7rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 1.25rem 0.5rem 0;
+      font-family: var(--font);
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .filter-btn:first-child { padding-left: 0; }
+    .filter-btn:hover, .filter-btn.active { color: var(--ink); }
+    .filter-btn.active {
+      border-bottom: var(--rail-w) solid var(--ink);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: var(--rail-w) solid var(--rule);
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer__left, .footer__right {
+      font-size: 0.7rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal--delay-1 { transition-delay: 0.08s; }
+    .reveal--delay-2 { transition-delay: 0.16s; }
+
+    @media (max-width: 768px) {
+      .nav { padding: 1.25rem 1.5rem; }
+      .nav__links { display: none; }
+      .shell { padding: 0 1.5rem; }
+      .page-header { padding: 7rem 0 3rem; }
+      .post-item { grid-template-columns: 1fr; gap: 0.4rem; }
+      .post-item__date { order: -1; }
+      .post-item__tags { justify-content: flex-start; }
+      .post-item__arrow { display: none; }
+      .footer { flex-direction: column; gap: 0.5rem; padding: 2rem 1.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="nav__name" href="ashi-sheth.html">Ashi Sheth</a>
+    <ul class="nav__links">
+      <li><a href="ashi-sheth.html#about">About</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="ashi-sheth.html#offering">Advisory</a></li>
+      <li><a href="writing.html" class="active">Writing</a></li>
+      <li><a href="ashi-sheth.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="shell">
+    <header class="page-header">
+      <p class="page-header__eyebrow reveal">From the desk of Ashi Sheth</p>
+      <h1 class="page-header__title reveal reveal--delay-1">Writing</h1>
+      <p class="page-header__desc reveal reveal--delay-2">
+        Perspectives on enterprise technology, organizational leadership, AI in
+        the workplace, and the human side of building things that scale.
+      </p>
+    </header>
+
+    <div class="filter-bar reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="leadership">Leadership</button>
+      <button class="filter-btn" data-filter="ai-automation">AI &amp; Automation</button>
+      <button class="filter-btn" data-filter="hr-tech">HR Tech</button>
+      <button class="filter-btn" data-filter="advisory">Advisory</button>
+      <button class="filter-btn" data-filter="culture">Culture</button>
+    </div>
+
+    <div class="post-list" id="post-list">
+
+      <a class="post-item reveal" href="writing/on-inheriting-broken-teams.html" data-tags="leadership culture">
+        <span class="post-item__date">Jun 2025</span>
+        <span class="post-item__title">What I learned being the sixth IT leader in four years</span>
+        <span class="post-item__tags">
+          <span class="tag">Leadership</span>
+          <span class="tag">Culture</span>
+        </span>
+        <span class="post-item__arrow">↗</span>
+      </a>
+
+      <a class="post-item reveal" href="writing/ai-automation-what-we-actually-built.html" data-tags="ai-automation">
+        <span class="post-item__date">May 2025</span>
+        <span class="post-item__title">We deflected 3,000 tickets a month with AI. Here's what we actually built.</span>
+        <span class="post-item__tags">
+          <span class="tag">AI &amp; Automation</span>
+        </span>
+        <span class="post-item__arrow">↗</span>
+      </a>
+
+      <a class="post-item reveal" href="writing/what-chros-actually-need.html" data-tags="hr-tech leadership">
+        <span class="post-item__date">Apr 2025</span>
+        <span class="post-item__title">What CHROs actually need from their technology partner</span>
+        <span class="post-item__tags">
+          <span class="tag">HR Tech</span>
+          <span class="tag">Leadership</span>
+        </span>
+        <span class="post-item__arrow">↗</span>
+      </a>
+
+      <!-- ─── ADD NEW POSTS ABOVE THIS LINE ───────────────────────
+           Copy the block above and update:
+           - href  →  writing/your-post-slug.html
+           - date  →  Month YYYY
+           - title →  Your post title
+           - tags  →  data-tags="tag1 tag2" and <span class="tag"> elements
+           Use slugs matching the filter-btn data-filter values:
+           leadership | ai-automation | hr-tech | advisory | culture
+      ──────────────────────────────────────────────────────────── -->
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span class="footer__left">Ashi Sheth · Writing</span>
+    <span class="footer__right"><a href="ashi-sheth.html">← Back to site</a></span>
+  </footer>
+
+  <script>
+    // Reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.05 });
+    reveals.forEach(el => { obs.observe(el); });
+    setTimeout(() => document.querySelectorAll('.page-header .reveal').forEach(el => el.classList.add('visible')), 50);
+
+    // Filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const postItems  = document.querySelectorAll('.post-item');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        postItems.forEach(item => {
+          const tags = item.dataset.tags || '';
+          item.style.display = (filter === 'all' || tags.includes(filter)) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

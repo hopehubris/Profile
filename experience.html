@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experience — Ashi Sheth</title>
+  <meta name="description" content="30 years of technology leadership across LinkedIn, Netflix, Yahoo, Laureate Education, American University of Sharjah, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:       #F7F6F3;
+      --ink:      #0E0E0E;
+      --muted:    #787570;
+      --rule:     #DEDAD4;
+      --font:     'Zen Kaku Gothic New', sans-serif;
+      --track:    0.12em;
+      --track-lg: 0.18em;
+      --rail-w:   1px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Nav */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: var(--bg);
+      border-bottom: var(--rail-w) solid var(--rule);
+    }
+    .nav__name { font-size: 0.8rem; font-weight: 500; letter-spacing: var(--track-lg); text-transform: uppercase; }
+    .nav__links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav__links a {
+      font-size: 0.75rem; letter-spacing: var(--track-lg); text-transform: uppercase;
+      color: var(--muted); transition: color 0.2s;
+    }
+    .nav__links a:hover, .nav__links a.active { color: var(--ink); }
+
+    /* Shell */
+    .shell { max-width: 1100px; margin: 0 auto; padding: 0 3rem; }
+
+    /* Page header */
+    .page-header {
+      padding: 9rem 0 4rem;
+      border-bottom: var(--rail-w) solid var(--rule);
+    }
+    .page-header__eyebrow {
+      font-size: 0.75rem; letter-spacing: var(--track-lg); text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1.25rem;
+    }
+    .page-header__title {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 500; letter-spacing: -0.02em; line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+    .page-header__desc {
+      font-size: 1rem; color: var(--muted); max-width: 560px; line-height: 1.8;
+    }
+
+    /* Timeline era labels */
+    .era {
+      font-size: 0.65rem; letter-spacing: var(--track-lg); text-transform: uppercase;
+      color: var(--rule); font-weight: 500;
+      padding: 2rem 0 0.75rem;
+      border-top: var(--rail-w) solid var(--rule);
+      margin-top: 2rem;
+    }
+    .era:first-of-type { margin-top: 0; border-top: none; padding-top: 2rem; }
+
+    /* Role rows */
+    .role {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0 2.5rem;
+      padding: 2.5rem 0;
+      border-bottom: var(--rail-w) solid var(--rule);
+    }
+    .role:first-of-type { border-top: var(--rail-w) solid var(--rule); }
+    .role__meta { padding-top: 0.15rem; }
+    .role__dates {
+      font-size: 0.7rem; letter-spacing: var(--track); text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.4rem;
+    }
+    .role__company {
+      font-size: 0.8rem; font-weight: 500; letter-spacing: var(--track);
+      text-transform: uppercase; color: var(--ink);
+    }
+    .role__title { font-size: 1.05rem; font-weight: 500; margin-bottom: 0.6rem; letter-spacing: -0.01em; }
+    .role__desc { font-size: 0.9rem; color: var(--muted); line-height: 1.75; }
+    .role__highlights {
+      margin-top: 0.75rem; list-style: none;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .role__highlights li {
+      font-size: 0.85rem; color: var(--muted); padding-left: 1.1em;
+      position: relative; line-height: 1.6;
+    }
+    .role__highlights li::before { content: '—'; position: absolute; left: 0; color: var(--rule); }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal--delay-1 { transition-delay: 0.08s; }
+
+    /* Footer */
+    .footer {
+      border-top: var(--rail-w) solid var(--rule);
+      padding: 2.5rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer__left, .footer__right {
+      font-size: 0.7rem; letter-spacing: var(--track); text-transform: uppercase; color: var(--muted);
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 1.25rem 1.5rem; }
+      .nav__links { display: none; }
+      .shell { padding: 0 1.5rem; }
+      .page-header { padding: 7rem 0 3rem; }
+      .role { grid-template-columns: 1fr; gap: 0.4rem; }
+      .footer { flex-direction: column; gap: 0.5rem; padding: 2rem 1.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="nav__name" href="ashi-sheth.html">Ashi Sheth</a>
+    <ul class="nav__links">
+      <li><a href="ashi-sheth.html#about">About</a></li>
+      <li><a href="experience.html" class="active">Experience</a></li>
+      <li><a href="ashi-sheth.html#offering">Advisory</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="ashi-sheth.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="shell">
+    <header class="page-header">
+      <p class="page-header__eyebrow reveal">30 years · 6 industries · 4 continents</p>
+      <h1 class="page-header__title reveal reveal--delay-1">Experience</h1>
+      <p class="page-header__desc reveal">
+        A career built across enterprise technology, higher education, media, manufacturing,
+        and the Middle East — with the pattern recognition that only comes from leading
+        in environments most technology executives never encounter.
+      </p>
+    </header>
+  </div>
+
+  <div class="shell" style="padding-bottom: 6rem;">
+
+    <p class="era reveal">Current</p>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2025 — Present</div>
+        <div class="role__company">Independent</div>
+      </div>
+      <div>
+        <div class="role__title">Technology Advisor</div>
+        <div class="role__desc">
+          Advising founders, COOs, and executive teams on enterprise technology
+          strategy, IT organizational design, HR tech modernization, and operational
+          scaling. Clients span SaaS startups, PE-backed companies, healthcare, and
+          education — typically 50–500 employees navigating operational complexity
+          for the first time at scale.
+        </div>
+      </div>
+    </div>
+
+    <p class="era reveal">LinkedIn &amp; Big Tech · 2013–2025</p>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2021 — 2025</div>
+        <div class="role__company">LinkedIn</div>
+      </div>
+      <div>
+        <div class="role__title">Director, Enterprise Technology &amp; HR Engineering</div>
+        <div class="role__desc">
+          Promoted to Director following expansion of scope to include HR Engineering — a function
+          previously embedded within HR that was restructured under my leadership. Led LinkedIn's
+          full employee-facing technology organization across 30+ global offices, ~30,000 employees.
+        </div>
+        <ul class="role__highlights">
+          <li>Built AI and automation team from scratch — 15% monthly ticket deflection (~3,000/month)</li>
+          <li>Drove ticket resolution from 5+ days to under 1 day (break/fix) and under 3 days (requests)</li>
+          <li>Consolidated 30+ HR applications into a modern stack: Workday, SmartRecruiters, Avature</li>
+          <li>Governed $20M MSP portfolio (HCL, Infosys, Accenture) with full accountability frameworks</li>
+          <li>Rolled out SailPoint identity governance and Microsoft Passkey at global scale</li>
+          <li>Strategic technology partner to the CHRO, TA leadership, and HR Operations</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2018 — 2021</div>
+        <div class="role__company">LinkedIn</div>
+      </div>
+      <div>
+        <div class="role__title">Sr. Manager, Enterprise Global Support</div>
+        <div class="role__desc">
+          Hired to consolidate and transform LinkedIn's fragmented global IT support function
+          into a unified, engineering-led operation serving all enterprise systems across 30+ offices worldwide.
+        </div>
+        <ul class="role__highlights">
+          <li>Unified MSP and FTE staff under a shared identity, metrics, and accountability model</li>
+          <li>Established trusted, unqualified performance data as the foundation for all decisions</li>
+          <li>Built the foundational automation and tooling capabilities that would later scale into a dedicated AI team</li>
+          <li>Introduced MSP accountability frameworks across a $20M vendor portfolio</li>
+          <li>Established the operational model and team structure supporting LinkedIn's continued global growth</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2015 — 2018</div>
+        <div class="role__company">Netflix</div>
+      </div>
+      <div>
+        <div class="role__title">Senior Manager, Enterprise Services Development</div>
+        <div class="role__desc">
+          Returned to Netflix in an expanded role following a brief executive assignment at Yahoo.
+          Led internal enterprise platforms supporting Netflix's global expansion and full shift
+          into original content production.
+        </div>
+        <ul class="role__highlights">
+          <li>Led internal software teams and enterprise app strategy as Netflix scaled internationally</li>
+          <li>Oversaw employee-facing platforms including help.netflix.com, jobs.netflix.com, and the 360 feedback system</li>
+          <li>Supported design and development of internal studio production tools for Netflix Originals</li>
+          <li>Led cross-functional teams of product managers, engineers, DevOps, and infrastructure staff</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">Late 2014 — Feb 2015</div>
+        <div class="role__company">Yahoo</div>
+      </div>
+      <div>
+        <div class="role__title">Chief of Staff to the CIO</div>
+        <div class="role__desc">
+          Followed Netflix VP Mike Kail to Yahoo when he became CIO. Supported executive leadership
+          on technology strategy, organizational priorities, and cross-functional initiatives at the
+          CIO level. Returned to Netflix in February 2015 in a senior expanded capacity.
+        </div>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2013 — 2014</div>
+        <div class="role__company">Netflix</div>
+      </div>
+      <div>
+        <div class="role__title">Manager, Enterprise Services Development</div>
+        <div class="role__desc">
+          Joined Netflix during one of the most consequential transitions in media history —
+          from DVD/streaming delivery into original content production and global expansion.
+        </div>
+        <ul class="role__highlights">
+          <li>Migrated core engineering infrastructure (including bug tracking) to AWS</li>
+          <li>Built executive self-service analytics dashboards across IT operations</li>
+          <li>Began overseeing employee-facing platforms and studio production tooling</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="era reveal">Global Education &amp; Non-Profit · 2005–2013</p>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2012 — 2013</div>
+        <div class="role__company">Laureate Education</div>
+      </div>
+      <div>
+        <div class="role__title">Director, Student Service Experience Platforms</div>
+        <div class="role__desc">
+          Brought in to standardize enterprise systems across one of the world's largest
+          for-profit university networks: 60+ institutions, 600,000+ students, operations
+          across Mexico, Thailand, Malaysia, and the US.
+        </div>
+        <ul class="role__highlights">
+          <li>Resolved platform fragmentation and LMS conflicts inherited from decentralized growth</li>
+          <li>Aligned technical and business stakeholders across multiple countries and time zones</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2005 — 2012</div>
+        <div class="role__company">American University of Sharjah</div>
+      </div>
+      <div>
+        <div class="role__title">Director of Information Technology</div>
+        <div class="role__desc">
+          Became the first IT leader to bring stability to this organization after five leadership
+          changes in four years — and stayed seven. Built the IT organization from the ground up.
+        </div>
+        <ul class="role__highlights">
+          <li>Reduced contractor costs by 70% annually through strategic insourcing and team development</li>
+          <li>Virtualized 70%+ of the datacenter, enabling a shift to SaaS as infrastructure matured</li>
+          <li>Pioneered the region's first campus-wide lecture capture and content self-publishing system</li>
+          <li>Served on the executive planning advisory board alongside the President, Provost, and Vice Chancellors</li>
+          <li>Improved student retention through Blackboard-based hybrid learning — years before "blended learning" became standard</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="era reveal">Earlier Career · 1995–2005</p>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2001 — 2005</div>
+        <div class="role__company">University of the Pacific</div>
+      </div>
+      <div>
+        <div class="role__title">Manager, Systems Engineering</div>
+        <div class="role__desc">
+          Led multi-campus IT infrastructure modernization on a $2–3M budget. Introduced
+          wireless networking, modern security architecture, and portal technologies.
+          Built faculty trust through visible, responsive support improvements.
+        </div>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">2000 — 2001</div>
+        <div class="role__company">Avaya / Lucent Technologies</div>
+      </div>
+      <div>
+        <div class="role__title">Manager, Computing Support Services (West Coast)</div>
+        <div class="role__desc">
+          Managed IT services for 9,000+ internal users during the high-stakes Avaya
+          corporate spinout from Lucent. Directed one of Avaya's largest U.S. datacenters
+          and its global voicemail support infrastructure during significant organizational transition.
+        </div>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">1996 — 2000</div>
+        <div class="role__company">Applied Aerospace Structures Corp.</div>
+      </div>
+      <div>
+        <div class="role__title">MIS Manager</div>
+        <div class="role__desc">
+          Ran the full IT stack as a team of one following an acquisition. Implemented
+          the company's ERP system and built the IT foundation for manufacturing operations.
+        </div>
+      </div>
+    </div>
+
+    <div class="role reveal">
+      <div class="role__meta">
+        <div class="role__dates">1995 — 1996</div>
+        <div class="role__company">Sun-Maid Raisin Growers</div>
+      </div>
+      <div>
+        <div class="role__title">Network Administrator</div>
+        <div class="role__desc">
+          First professional role. Built and maintained network infrastructure for one
+          of the most recognized food brands in the US.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <span class="footer__left">Ashi Sheth · Experience</span>
+    <span class="footer__right"><a href="ashi-sheth.html">← Back to site</a></span>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.05 });
+    reveals.forEach(el => obs.observe(el));
+    setTimeout(() => document.querySelectorAll('.page-header .reveal').forEach(el => el.classList.add('visible')), 50);
+  </script>
+
+</body>
+</html>
