@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashutosh (Ashi) Sheth — Technology Advisor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Tokens ─────────────────────────────────────────────────── */
+    :root {
+      --bg:       #F7F6F3;
+      --ink:      #0E0E0E;
+      --muted:    #787570;
+      --rule:     #DEDAD4;
+      --accent:   #0E0E0E;
+      --rail-w:   1px;
+      --font:     'Zen Kaku Gothic New', sans-serif;
+      --track:    0.12em;
+      --track-lg: 0.18em;
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Nav ─────────────────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: var(--bg);
+      border-bottom: var(--rail-w) solid transparent;
+      transition: border-color 0.3s;
+    }
+    .nav.scrolled { border-color: var(--rule); }
+    .nav__name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+    }
+    .nav__links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav__links a {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav__links a:hover { color: var(--ink); }
+
+    /* ─── Layout shell ────────────────────────────────────────────── */
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
+
+    /* ─── Rail (Kanso signature element) ─────────────────────────── */
+    /* Vertical left border + rotated section label */
+    .section {
+      position: relative;
+      padding: 7rem 0 7rem 4rem;
+      border-left: var(--rail-w) solid var(--rule);
+    }
+    .section__label {
+      position: absolute;
+      left: -0.35rem;
+      top: 7rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      user-select: none;
+    }
+
+    /* ─── Hero ────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 6rem;
+      position: relative;
+    }
+    .hero__seal {
+      position: absolute;
+      top: 50%;
+      right: 3rem;
+      transform: translateY(-50%);
+      width: 120px;
+      height: 120px;
+      border: var(--rail-w) solid var(--rule);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      opacity: 0.6;
+    }
+    .hero__seal span {
+      font-size: 0.6rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .hero__eyebrow {
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .hero__name {
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      font-weight: 500;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+    .hero__name em {
+      font-style: normal;
+      color: var(--muted);
+    }
+    .hero__thesis {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.8;
+      border-left: var(--rail-w) solid var(--rule);
+      padding-left: 1.5rem;
+    }
+    .hero__scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 3rem;
+      font-size: 0.65rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero__scroll::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: var(--rail-w);
+      background: var(--rule);
+    }
+
+    /* ─── About ───────────────────────────────────────────────────── */
+    .about__body {
+      max-width: 680px;
+    }
+    .about__lead {
+      font-size: 1.4rem;
+      font-weight: 500;
+      line-height: 1.5;
+      margin-bottom: 2.5rem;
+      letter-spacing: -0.01em;
+    }
+    .about__copy p {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.8;
+    }
+    .about__copy p strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .about__stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      border-top: var(--rail-w) solid var(--rule);
+    }
+    .stat {
+      padding: 2rem 2rem 2rem 0;
+      border-right: var(--rail-w) solid var(--rule);
+    }
+    .stat:last-child { border-right: none; padding-left: 2rem; padding-right: 0; }
+    .stat:nth-child(2) { padding-left: 2rem; }
+    .stat__num {
+      font-size: 2.5rem;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat__label {
+      font-size: 0.7rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── Story / Experience ──────────────────────────────────────── */
+    .story__grid {
+      display: grid;
+      gap: 0;
+    }
+    .role {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 0 2.5rem;
+      padding: 2.5rem 0;
+      border-bottom: var(--rail-w) solid var(--rule);
+    }
+    .role:first-child { border-top: var(--rail-w) solid var(--rule); }
+    .role__meta {
+      padding-top: 0.15rem;
+    }
+    .role__dates {
+      font-size: 0.7rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .role__company {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .role__title {
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+    .role__desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .role__highlights {
+      margin-top: 0.75rem;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .role__highlights li {
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding-left: 1.1em;
+      position: relative;
+      line-height: 1.6;
+    }
+    .role__highlights li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--rule);
+    }
+
+    /* ─── Offering ────────────────────────────────────────────────── */
+    .offering__intro {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 580px;
+      line-height: 1.8;
+      margin-bottom: 4rem;
+    }
+    .offering__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: var(--rail-w) solid var(--rule);
+    }
+    .offer {
+      padding: 2.5rem 2rem 2.5rem 0;
+      border-right: var(--rail-w) solid var(--rule);
+    }
+    .offer:last-child { border-right: none; padding-left: 2rem; padding-right: 0; }
+    .offer:nth-child(2) { padding-left: 2rem; }
+    .offer__index {
+      font-size: 0.65rem;
+      letter-spacing: var(--track-lg);
+      color: var(--rule);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+    .offer__title {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.01em;
+    }
+    .offer__desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+    .offer__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+    }
+    .tag {
+      font-size: 0.65rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+      border: var(--rail-w) solid var(--rule);
+      padding: 0.25rem 0.6rem;
+    }
+    .offering__focus {
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: var(--rail-w) solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .offering__focus h3 {
+      font-size: 0.75rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+    }
+    .focus__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .focus__list li {
+      font-size: 0.9rem;
+      color: var(--ink);
+      padding-left: 1.1em;
+      position: relative;
+    }
+    .focus__list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--rule);
+    }
+
+    /* ─── Contact ─────────────────────────────────────────────────── */
+    .contact__body {
+      max-width: 600px;
+    }
+    .contact__heading {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+    }
+    .contact__copy {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+    .contact__links {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: var(--rail-w) solid var(--rule);
+    }
+    .contact__link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: var(--rail-w) solid var(--rule);
+      transition: padding-left 0.2s;
+    }
+    .contact__link:hover { padding-left: 0.5rem; }
+    .contact__link-label {
+      font-size: 0.7rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .contact__link-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .contact__link-arrow {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-left: 1rem;
+    }
+
+    /* ─── Footer ──────────────────────────────────────────────────── */
+    .footer {
+      border-top: var(--rail-w) solid var(--rule);
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer__left {
+      font-size: 0.7rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer__right {
+      font-size: 0.7rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── Reveal animation ────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal--delay-1 { transition-delay: 0.1s; }
+    .reveal--delay-2 { transition-delay: 0.2s; }
+    .reveal--delay-3 { transition-delay: 0.3s; }
+
+    /* ─── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav { padding: 1.25rem 1.5rem; }
+      .nav__links { display: none; }
+      .hero { padding: 0 1.5rem 5rem; }
+      .hero__seal { display: none; }
+      .shell { padding: 0 1.5rem; }
+      .section { padding: 5rem 0 5rem 2.5rem; }
+      .about__stats { grid-template-columns: 1fr 1fr; }
+      .stat:last-child { grid-column: 1 / -1; border-right: none; padding-left: 0; border-top: var(--rail-w) solid var(--rule); }
+      .role { grid-template-columns: 1fr; gap: 0.5rem; }
+      .offering__grid { grid-template-columns: 1fr; }
+      .offer, .offer:nth-child(2), .offer:last-child {
+        border-right: none;
+        border-bottom: var(--rail-w) solid var(--rule);
+        padding: 2rem 0;
+      }
+      .offering__focus { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ─── Writing teaser ──────────────────────────────────────────── */
+    .writing-teaser__list {
+      display: flex;
+      flex-direction: column;
+    }
+    .writing-teaser__item {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 0 2.5rem;
+      align-items: baseline;
+      padding: 1.75rem 0;
+      border-bottom: var(--rail-w) solid var(--rule);
+      transition: padding-left 0.2s;
+      cursor: pointer;
+    }
+    .writing-teaser__item:first-child { border-top: var(--rail-w) solid var(--rule); }
+    .writing-teaser__item:hover { padding-left: 0.5rem; }
+    .writing-teaser__date {
+      font-size: 0.7rem;
+      letter-spacing: var(--track);
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .writing-teaser__title {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .writing-teaser__arrow { font-size: 0.8rem; color: var(--muted); }
+    .writing-teaser__more {
+      margin-top: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      letter-spacing: var(--track-lg);
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .writing-teaser__more:hover { color: var(--ink); }
+    .writing-teaser__more::after {
+      content: '';
+      display: block;
+      width: 30px;
+      height: var(--rail-w);
+      background: currentColor;
+      transition: width 0.2s;
+    }
+    .writing-teaser__more:hover::after { width: 50px; }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Nav ───────────────────────────────────────────────────── -->
+  <nav class="nav" id="nav">
+    <span class="nav__name">Ashi Sheth</span>
+    <ul class="nav__links">
+      <li><a href="#about">About</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="#offering">Advisory</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── Hero ──────────────────────────────────────────────────── -->
+  <section class="hero" id="home">
+    <div class="hero__seal">
+      <span>San Francisco<br/>Bay Area</span>
+      <span>Est. 1995</span>
+    </div>
+    <p class="hero__eyebrow reveal">Technology Executive &amp; Advisor</p>
+    <h1 class="hero__name reveal reveal--delay-1">
+      Ashutosh<br/>
+      <em>(Ashi)</em><br/>
+      Sheth
+    </h1>
+    <p class="hero__thesis reveal reveal--delay-2">
+      30 years building enterprise systems, global teams, and operational cultures
+      across LinkedIn, Netflix, the Middle East, and beyond.
+      Now advising the organizations ready to do it right.
+    </p>
+    <span class="hero__scroll">Scroll</span>
+  </section>
+
+  <!-- ─── About ─────────────────────────────────────────────────── -->
+  <div class="shell">
+    <section class="section" id="about">
+      <span class="section__label">About</span>
+      <div class="about__body">
+        <p class="about__lead reveal">
+          I take messy, inherited situations — fragmented tooling, underperforming
+          vendors, ungoverned tech functions — and create clarity, accountability,
+          and momentum.
+        </p>
+        <div class="about__copy reveal reveal--delay-1">
+          <p>
+            Most recently, I led LinkedIn's global Technology Support and HR Engineering
+            organizations: <strong>55+ engineers</strong>, 120+ managed service staff,
+            30+ offices across four continents, and a <strong>$20M vendor portfolio</strong>
+            spanning HCL, Infosys, and Accenture. Before that, Netflix — where I helped
+            build the internal platforms that supported the company's leap into original
+            content and global expansion.
+          </p>
+          <p>
+            I've also led in contexts most technology leaders haven't:
+            a university in the UAE for seven years, a global ed-tech network spanning
+            60+ institutions and 600,000 students, an aerospace manufacturer, a telecom
+            giant mid-spinout. That breadth gives me <strong>pattern recognition that's
+            hard to fake</strong> — I've seen the same transformation challenges play out
+            across radically different industries, cultures, and resource environments.
+          </p>
+          <p>
+            I care deeply about the human side of technology leadership: how you build
+            teams that own their systems, earn trust from skeptical business leaders,
+            and create cultures where engineers solve problems rather than close tickets.
+          </p>
+        </div>
+
+        <div class="about__stats reveal reveal--delay-2">
+          <div class="stat">
+            <div class="stat__num">30+</div>
+            <div class="stat__label">Years leading enterprise technology</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num">175+</div>
+            <div class="stat__label">Engineers &amp; MSP staff led at LinkedIn</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num">6</div>
+            <div class="stat__label">Industries across 4 continents</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ─── Experience teaser ───────────────────────────────────────── -->
+  <div class="shell">
+    <section class="section" id="story">
+      <span class="section__label">Experience</span>
+      <div class="about__body">
+        <p class="about__lead reveal">
+          30 years across LinkedIn, Netflix, Yahoo, Laureate Education, American
+          University of Sharjah, Avaya, and more — spanning enterprise tech, higher
+          education, media, manufacturing, and the Middle East.
+        </p>
+        <a class="writing-teaser__more reveal reveal--delay-1" href="experience.html">Full career history</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ─── Offering ───────────────────────────────────────────────── -->
+  <div class="shell">
+    <section class="section" id="offering">
+      <span class="section__label">Advisory</span>
+
+      <p class="offering__intro reveal">
+        My advisory model is built for organizations at an inflection point —
+        where the old way of running technology no longer works at the new scale.
+      </p>
+
+      <div class="offering__grid reveal reveal--delay-1">
+        <div class="offer">
+          <div class="offer__index">01</div>
+          <div class="offer__title">Assessment &amp; Roadmap</div>
+          <div class="offer__desc">
+            Evaluate a specific organizational, operational, or technology challenge.
+            Stakeholder interviews, current-state diagnosis, prioritized recommendations,
+            and an implementation roadmap. 2–4 weeks.
+          </div>
+          <div class="offer__tags">
+            <span class="tag">IT Org Design</span>
+            <span class="tag">HR Tech</span>
+            <span class="tag">Vendor Audit</span>
+          </div>
+        </div>
+
+        <div class="offer">
+          <div class="offer__index">02</div>
+          <div class="offer__title">Transformation Engagement</div>
+          <div class="offer__desc">
+            Design and implement solutions for a defined challenge. From AI and
+            automation adoption to HR tech consolidation to operating model
+            redesign. Hands-on through delivery. 3–6 weeks.
+          </div>
+          <div class="offer__tags">
+            <span class="tag">AI / Automation</span>
+            <span class="tag">Platform Consolidation</span>
+            <span class="tag">Change Management</span>
+          </div>
+        </div>
+
+        <div class="offer">
+          <div class="offer__index">03</div>
+          <div class="offer__title">Fractional Advisory</div>
+          <div class="offer__desc">
+            Ongoing strategic and operational technology leadership for organizations
+            that need executive-level perspective without a full-time hire.
+            Monthly retainer. Aligned with your planning cycles.
+          </div>
+          <div class="offer__tags">
+            <span class="tag">Fractional CTO / CIO</span>
+            <span class="tag">Strategic Planning</span>
+            <span class="tag">Board Readiness</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="offering__focus reveal">
+        <div>
+          <h3>Technology Focus Areas</h3>
+          <ul class="focus__list">
+            <li>Enterprise IT strategy &amp; organizational design</li>
+            <li>AI and automation for internal operations</li>
+            <li>HR technology stack rationalization</li>
+            <li>Vendor &amp; MSP governance</li>
+            <li>Identity &amp; access management</li>
+            <li>Technology due diligence (PE/M&amp;A)</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Who I Work With</h3>
+          <ul class="focus__list">
+            <li>SaaS companies scaling past 50–500 employees</li>
+            <li>PE-backed portfolio companies in transformation</li>
+            <li>Healthcare and education organizations modernizing</li>
+            <li>Founders building enterprise infrastructure</li>
+            <li>CHROs and COOs partnering with technology</li>
+            <li>Manufacturing and logistics operations</li>
+          </ul>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ─── Writing teaser ────────────────────────────────────────── -->
+  <div class="shell">
+    <section class="section" id="writing">
+      <span class="section__label">Writing</span>
+      <div class="writing-teaser__list reveal">
+        <a class="writing-teaser__item" href="writing/on-inheriting-broken-teams.html">
+          <span class="writing-teaser__date">Jun 2025</span>
+          <span class="writing-teaser__title">What I learned being the sixth IT leader in four years</span>
+          <span class="writing-teaser__arrow">↗</span>
+        </a>
+        <a class="writing-teaser__item" href="writing/ai-automation-what-we-actually-built.html">
+          <span class="writing-teaser__date">May 2025</span>
+          <span class="writing-teaser__title">We deflected 3,000 tickets a month with AI. Here's what we actually built.</span>
+          <span class="writing-teaser__arrow">↗</span>
+        </a>
+        <a class="writing-teaser__item" href="writing/what-chros-actually-need.html">
+          <span class="writing-teaser__date">Apr 2025</span>
+          <span class="writing-teaser__title">What CHROs actually need from their technology partner</span>
+          <span class="writing-teaser__arrow">↗</span>
+        </a>
+      </div>
+      <a class="writing-teaser__more reveal reveal--delay-1" href="writing.html">All writing</a>
+    </section>
+  </div>
+
+  <!-- ─── Contact ────────────────────────────────────────────────── -->
+  <div class="shell">
+    <section class="section" id="contact">
+      <span class="section__label">Contact</span>
+      <div class="contact__body">
+        <h2 class="contact__heading reveal">
+          Let's talk about what you're building.
+        </h2>
+        <p class="contact__copy reveal reveal--delay-1">
+          If you're navigating a technology inflection point — or thinking about
+          what comes next for your organization — I'd welcome a conversation.
+        </p>
+        <div class="contact__links reveal reveal--delay-2">
+          <a class="contact__link" href="mailto:ashi.sheth@gmail.com">
+            <span class="contact__link-label">Email</span>
+            <span>
+              <span class="contact__link-value">ashi.sheth@gmail.com</span>
+              <span class="contact__link-arrow">↗</span>
+            </span>
+          </a>
+          <a class="contact__link" href="https://linkedin.com/in/ashisheth" target="_blank" rel="noopener">
+            <span class="contact__link-label">LinkedIn</span>
+            <span>
+              <span class="contact__link-value">linkedin.com/in/ashisheth</span>
+              <span class="contact__link-arrow">↗</span>
+            </span>
+          </a>
+          <a class="contact__link" href="tel:14087690669">
+            <span class="contact__link-label">Phone</span>
+            <span>
+              <span class="contact__link-value">+1 408 769 0669</span>
+              <span class="contact__link-arrow">↗</span>
+            </span>
+          </a>
+          <div class="contact__link" style="cursor:default;">
+            <span class="contact__link-label">Location</span>
+            <span class="contact__link-value">San Francisco Bay Area, CA</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ─── Footer ─────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <span class="footer__left">Ashutosh (Ashi) Sheth · Technology Advisor</span>
+    <span class="footer__right">San Francisco Bay Area · 2025</span>
+  </footer>
+
+  <!-- ─── Scripts ────────────────────────────────────────────────── -->
+  <script>
+    // Nav scroll state
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Hero elements visible immediately
+    document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 150);
+    });
+  </script>
+</body>
+</html>
