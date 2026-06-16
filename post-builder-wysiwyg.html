@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Builder (WYSIWYG) — Ashi Sheth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#F7F6F3; --ink:#0E0E0E; --muted:#787570; --rule:#DEDAD4;
+      --font:'Zen Kaku Gothic New',sans-serif;
+      --track:0.12em; --track-lg:0.18em; --rail-w:1px;
+      --ui-bg:#EFEDE9; --ui-border:#DEDAD4;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:var(--font); background:var(--bg); color:var(--ink); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; height:100vh; overflow:hidden; }
+    a { color:inherit; text-decoration:none; }
+
+    /* ── Top bar ──────────────────────────────────────────── */
+    .bar {
+      height:52px; display:flex; align-items:center; gap:0;
+      border-bottom:1px solid var(--rule); background:var(--bg);
+      padding:0 1rem; flex-shrink:0;
+    }
+    .bar__name { font-size:0.72rem; font-weight:500; letter-spacing:var(--track-lg); text-transform:uppercase; padding-right:1rem; border-right:1px solid var(--rule); margin-right:1rem; white-space:nowrap; }
+    .bar__field { display:flex; flex-direction:column; gap:1px; padding:0 0.75rem; border-right:1px solid var(--rule); }
+    .bar__field:last-of-type { border-right:none; }
+    .bar__field label { font-size:0.55rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); }
+    .bar__field input { font-family:var(--font); font-size:0.78rem; border:none; background:transparent; color:var(--ink); width:100%; padding:0; }
+    .bar__field input:focus { outline:none; }
+    .bar__slug { width:220px; }
+    .bar__date { width:100px; }
+    .bar__spacer { flex:1; }
+    .bar__file { font-size:0.68rem; letter-spacing:0.08em; color:var(--muted); padding:0 1rem; white-space:nowrap; }
+    .bar__file.unsaved::after { content:' •'; color:var(--ink); }
+    .bar__actions { display:flex; gap:0.4rem; padding-left:0.75rem; border-left:1px solid var(--rule); }
+    .btn { font-family:var(--font); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.38rem 0.8rem; border-radius:3px; cursor:pointer; transition:opacity 0.15s; white-space:nowrap; }
+    .btn:hover { opacity:0.75; }
+    .btn--ghost { background:transparent; color:var(--muted); border:1px solid var(--rule); }
+    .btn--solid { background:var(--ink); color:var(--bg); border:none; }
+    .btn--save  { background:transparent; color:var(--ink); border:1px solid var(--ink); }
+    .btn:disabled { opacity:0.3; cursor:default; }
+
+    /* Tags in bar */
+    .bar__tags { display:flex; gap:4px; align-items:center; padding:0 0.75rem; border-right:1px solid var(--rule); }
+    .bar__tag-label { font-size:0.55rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-right:4px; }
+    .tag-btn { font-family:var(--font); font-size:0.58rem; letter-spacing:0.08em; text-transform:uppercase; padding:2px 8px; border:1px solid var(--rule); border-radius:20px; cursor:pointer; background:var(--bg); color:var(--muted); transition:all 0.15s; }
+    .tag-btn.on { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+
+    /* ── Layout ───────────────────────────────────────────── */
+    .layout { display:grid; grid-template-columns:210px 1fr; height:calc(100vh - 52px); overflow:hidden; }
+
+    /* ── Drafts panel ─────────────────────────────────────── */
+    .drafts { border-right:1px solid var(--rule); display:flex; flex-direction:column; overflow:hidden; background:var(--ui-bg); }
+    .drafts__head { padding:0.9rem; border-bottom:1px solid var(--rule); display:flex; flex-direction:column; gap:0.5rem; flex-shrink:0; }
+    .drafts__label { font-size:0.6rem; letter-spacing:var(--track-lg); text-transform:uppercase; color:var(--muted); font-weight:500; }
+    .drafts__list { overflow-y:auto; flex:1; }
+    .draft-item { display:flex; align-items:flex-start; gap:0.4rem; padding:0.6rem 0.9rem; border-bottom:1px solid var(--rule); cursor:pointer; transition:background 0.1s; }
+    .draft-item:hover { background:#e5e3de; }
+    .draft-item.active { background:#dedad4; }
+    .draft-item__dot { font-size:0.7rem; color:var(--rule); flex-shrink:0; margin-top:2px; }
+    .draft-item__name { font-size:0.75rem; color:var(--ink); line-height:1.3; word-break:break-all; }
+    .draft-item.active .draft-item__name { font-weight:500; }
+    .drafts__empty { padding:1.25rem 0.9rem; font-size:0.75rem; color:var(--muted); line-height:1.6; }
+    .drafts__foot { padding:0.75rem; border-top:1px solid var(--rule); display:flex; flex-direction:column; gap:0.4rem; flex-shrink:0; }
+
+    /* ── Canvas (WYSIWYG post) ────────────────────────────── */
+    .canvas { overflow-y:auto; position:relative; }
+    .canvas-inner { max-width:760px; margin:0 auto; padding:4rem 3rem 6rem; }
+
+    /* Post chrome (static) */
+    .post-chrome-back { font-size:0.7rem; letter-spacing:var(--track-lg); text-transform:uppercase; color:var(--muted); margin-bottom:2.5rem; display:flex; align-items:center; gap:6px; opacity:0.5; }
+    .post-chrome-back::before { content:'←'; }
+    .post-meta { display:flex; gap:1rem; align-items:center; margin-bottom:1.75rem; }
+    .post-date { font-size:0.7rem; letter-spacing:var(--track); text-transform:uppercase; color:var(--muted); }
+    .post-tag  { font-size:0.62rem; letter-spacing:var(--track); text-transform:uppercase; color:var(--muted); border:1px solid var(--rule); padding:0.2rem 0.55rem; }
+
+    /* Editable regions */
+    [contenteditable] { outline:none; }
+    [contenteditable]:empty::before { content:attr(data-ph); color:var(--rule); pointer-events:none; }
+    [contenteditable]:focus { background:rgba(222,218,212,0.18); border-radius:2px; }
+
+    /* Title */
+    .post-title {
+      font-size:clamp(2rem,4vw,3rem); font-weight:500; line-height:1.1;
+      letter-spacing:-0.02em; margin-bottom:1.75rem; color:var(--ink);
+      min-height:1.2em;
+    }
+
+    /* Lede */
+    .post-lede {
+      font-size:1.1rem; color:var(--muted); line-height:1.75;
+      padding-bottom:2.25rem; border-bottom:1px solid var(--rule);
+      margin-bottom:2.25rem; min-height:1.5em;
+    }
+
+    /* Body blocks */
+    .post-body { position:relative; }
+    .block {
+      position:relative; min-height:1.4em;
+      padding:2px 0; margin-bottom:0;
+      transition:background 0.1s;
+    }
+    .block:hover { background:rgba(222,218,212,0.15); border-radius:2px; }
+    .block:focus { background:rgba(222,218,212,0.22); border-radius:2px; }
+
+    .block[data-type="p"]          { font-size:1rem; line-height:1.85; color:var(--ink); margin-bottom:1.4rem; }
+    .block[data-type="h2"]         { font-size:1.15rem; font-weight:500; letter-spacing:-0.01em; margin:2.25rem 0 0.9rem; color:var(--ink); }
+    .block[data-type="h3"]         { font-size:0.78rem; font-weight:500; letter-spacing:var(--track-lg); text-transform:uppercase; color:var(--muted); margin:1.75rem 0 0.6rem; }
+    .block[data-type="blockquote"] { border-left:1px solid var(--ink); padding-left:1.5rem; margin:1.75rem 0; font-size:1.05rem; color:var(--muted); line-height:1.7; }
+    .block[data-type="li"]         { font-size:1rem; line-height:1.75; padding-left:1.25em; position:relative; color:var(--ink); margin-bottom:0.35rem; }
+    .block[data-type="li"]::before { content:'—'; position:absolute; left:0; color:var(--rule); }
+
+    /* Block controls — appear on hover/focus */
+    .block-ctrl {
+      position:absolute; left:-68px; top:2px;
+      display:none; align-items:center; gap:3px;
+      z-index:10;
+    }
+    .block:hover .block-ctrl,
+    .block:focus .block-ctrl,
+    .block:focus-within .block-ctrl { display:flex; }
+    .block-ctrl select {
+      font-family:var(--font); font-size:0.6rem; padding:2px 4px;
+      border:1px solid var(--rule); border-radius:3px;
+      background:var(--bg); color:var(--muted); cursor:pointer;
+      appearance:none; -webkit-appearance:none;
+    }
+    .block-ctrl select:focus { outline:none; }
+    .block-del {
+      font-size:0.85rem; line-height:1; padding:1px 4px;
+      background:none; border:1px solid var(--rule); border-radius:3px;
+      cursor:pointer; color:var(--rule); font-family:var(--font);
+      transition:color 0.15s, border-color 0.15s;
+    }
+    .block-del:hover { color:var(--ink); border-color:var(--muted); }
+
+    /* Add block button */
+    .add-block {
+      margin-top:1.5rem; display:flex; align-items:center; gap:0.6rem;
+      color:var(--rule); transition:color 0.2s; cursor:pointer;
+      font-size:0.7rem; letter-spacing:var(--track-lg); text-transform:uppercase;
+      background:none; border:none; font-family:var(--font); padding:0;
+    }
+    .add-block:hover { color:var(--muted); }
+    .add-block::before { content:''; flex:1; height:1px; background:var(--rule); }
+    .add-block::after  { content:''; flex:1; height:1px; background:var(--rule); }
+
+    /* Block type menu */
+    .block-menu {
+      position:fixed; background:var(--bg); border:1px solid var(--rule);
+      border-radius:4px; padding:4px; z-index:100; display:none;
+      box-shadow:0 4px 16px rgba(0,0,0,0.08);
+    }
+    .block-menu.open { display:block; }
+    .block-menu button {
+      display:block; width:100%; text-align:left; font-family:var(--font);
+      font-size:0.72rem; padding:6px 12px; background:none; border:none;
+      cursor:pointer; color:var(--muted); border-radius:3px; white-space:nowrap;
+      letter-spacing:0.04em;
+    }
+    .block-menu button:hover { background:var(--ui-bg); color:var(--ink); }
+
+    /* Post footer chrome (static) */
+    .post-chrome-footer { margin-top:4rem; padding-top:2.5rem; border-top:1px solid var(--rule); display:flex; justify-content:space-between; align-items:center; opacity:0.5; pointer-events:none; }
+    .post-chrome-back2 { font-size:0.7rem; letter-spacing:var(--track-lg); text-transform:uppercase; color:var(--muted); }
+    .post-chrome-author-name { font-size:0.8rem; font-weight:500; text-align:right; }
+    .post-chrome-author-role { font-size:0.7rem; letter-spacing:var(--track); text-transform:uppercase; color:var(--muted); text-align:right; }
+
+    /* Snippet */
+    .snippet-row { margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--rule); }
+    .snippet-label { font-size:0.6rem; letter-spacing:var(--track-lg); text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+    .snippet-box { background:var(--ui-bg); border:1px solid var(--rule); border-radius:3px; padding:0.5rem 0.65rem; font-family:'Courier New',monospace; font-size:0.65rem; color:var(--muted); line-height:1.6; word-break:break-all; cursor:pointer; transition:background 0.15s; }
+    .snippet-box:hover { background:#e5e3de; }
+
+    /* Toast */
+    .toast { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); font-size:0.72rem; letter-spacing:0.08em; padding:0.5rem 1.1rem; border-radius:4px; opacity:0; transition:opacity 0.2s; pointer-events:none; z-index:9999; }
+    .toast.show { opacity:1; }
+
+    /* No FS API notice */
+    .no-api { display:none; font-size:0.68rem; color:var(--muted); line-height:1.5; padding:0.5rem; background:#e8e6e1; border-radius:3px; }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="bar">
+  <span class="bar__name">Ashi Sheth</span>
+
+  <div class="bar__field bar__slug">
+    <label>Filename (slug)</label>
+    <input id="f-slug" placeholder="your-post-title" spellcheck="false" />
+  </div>
+
+  <div class="bar__field bar__date">
+    <label>Date</label>
+    <input id="f-date" placeholder="June 2025" />
+  </div>
+
+  <div class="bar__tags">
+    <span class="bar__tag-label">Tags</span>
+    <button class="tag-btn" data-tag="Leadership">Leadership</button>
+    <button class="tag-btn" data-tag="AI &amp; Automation">AI &amp; Automation</button>
+    <button class="tag-btn" data-tag="HR Tech">HR Tech</button>
+    <button class="tag-btn" data-tag="Advisory">Advisory</button>
+    <button class="tag-btn" data-tag="Culture">Culture</button>
+  </div>
+
+  <div class="bar__spacer"></div>
+  <span class="bar__file" id="bar-file">New post</span>
+
+  <div class="bar__actions">
+    <button class="btn btn--ghost" onclick="newPost()">New</button>
+    <button class="btn btn--ghost" id="btn-folder" onclick="openFolder()">Open folder</button>
+    <button class="btn btn--save"  id="btn-save" onclick="saveFile()" disabled>Save</button>
+    <button class="btn btn--solid" onclick="downloadHTML()">↓ Download</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- Drafts -->
+  <div class="drafts">
+    <div class="drafts__head">
+      <span class="drafts__label">Drafts</span>
+      <div class="no-api" id="no-api">Folder access requires Chrome or Edge. Use upload below.</div>
+    </div>
+    <div class="drafts__list" id="drafts-list">
+      <div class="drafts__empty" id="drafts-empty">Open your <code style="font-size:0.8em">writing/</code> folder to manage drafts.</div>
+    </div>
+    <div class="drafts__foot">
+      <label class="btn btn--ghost" style="text-align:center;cursor:pointer;display:block;">
+        ↑ Upload to edit
+        <input type="file" accept=".html" style="display:none" id="file-upload" onchange="handleUpload(this)" />
+      </label>
+    </div>
+  </div>
+
+  <!-- WYSIWYG canvas -->
+  <div class="canvas" id="canvas" onclick="canvasClick(event)">
+    <div class="canvas-inner">
+
+      <div class="post-chrome-back">All writing</div>
+
+      <div class="post-meta">
+        <span class="post-date" id="p-date">Month YYYY</span>
+        <span id="p-tags"></span>
+      </div>
+
+      <h1 class="post-title" id="post-title"
+          contenteditable="true" spellcheck="true"
+          data-ph="Your post title…"
+          oninput="markDirty();syncSlug()"></h1>
+
+      <p class="post-lede" id="post-lede"
+         contenteditable="true" spellcheck="true"
+         data-ph="Opening paragraph — the hook that draws the reader in…"
+         oninput="markDirty()"></p>
+
+      <div class="post-body" id="post-body"></div>
+
+      <button class="add-block" id="add-btn" onclick="showBlockMenu(event)">Add block</button>
+
+      <div class="post-chrome-footer">
+        <span class="post-chrome-back2">← All writing</span>
+        <div>
+          <div class="post-chrome-author-name">Ashi Sheth</div>
+          <div class="post-chrome-author-role">Technology Advisor</div>
+        </div>
+      </div>
+
+      <div class="snippet-row">
+        <div class="snippet-label">writing.html row — click to copy</div>
+        <div class="snippet-box" id="snippet" onclick="copySnippet()"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Block type menu -->
+<div class="block-menu" id="block-menu">
+  <button onclick="insertBlock('p')">¶  Paragraph</button>
+  <button onclick="insertBlock('h2')">H2  Section heading</button>
+  <button onclick="insertBlock('h3')">H3  Label heading</button>
+  <button onclick="insertBlock('blockquote')">"  Pull quote</button>
+  <button onclick="insertBlock('li')">—  List item</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── State ────────────────────────────────────────────── */
+let tagSel = [];
+let dirHandle = null, fileHandle = null, fileHandles = {};
+let isDirty = false;
+const HAS_FS = ('showDirectoryPicker' in window);
+const TYPE_LABELS = { p:'¶ Para', h2:'H2', h3:'H3', blockquote:'" Quote', li:'— List' };
+const TYPE_PH     = { p:'Paragraph…', h2:'Section heading…', h3:'Label heading…', blockquote:'Pull quote…', li:'List item…' };
+
+/* ── Boot ─────────────────────────────────────────────── */
+if (!HAS_FS) {
+  document.getElementById('no-api').style.display = 'block';
+  document.getElementById('btn-folder').style.display = 'none';
+}
+insertBlock('p'); // start with one blank paragraph
+updateMeta();
+
+/* ── Tags ─────────────────────────────────────────────── */
+document.querySelectorAll('.tag-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    const v = b.dataset.tag;
+    tagSel.includes(v) ? (tagSel = tagSel.filter(x=>x!==v), b.classList.remove('on'))
+                        : (tagSel.push(v), b.classList.add('on'));
+    markDirty(); updateMeta();
+  });
+});
+
+/* ── Date / slug field sync ───────────────────────────── */
+document.getElementById('f-date').addEventListener('input', () => { markDirty(); updateMeta(); });
+document.getElementById('f-slug').addEventListener('input', () => { document.getElementById('f-slug')._touched = true; markDirty(); updateSnippet(); });
+
+function syncSlug() {
+  const slugEl = document.getElementById('f-slug');
+  if (!slugEl._touched) {
+    slugEl.value = slugify(document.getElementById('post-title').innerText);
+  }
+  updateSnippet();
+}
+
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').slice(0,80);
+}
+
+/* ── Meta sync ────────────────────────────────────────── */
+function updateMeta() {
+  const date = document.getElementById('f-date').value || 'Month YYYY';
+  document.getElementById('p-date').textContent = date;
+  document.getElementById('p-tags').innerHTML = tagSel.map(t=>`<span class="post-tag">${t}</span>`).join(' ');
+  updateSnippet();
+}
+
+function updateSnippet() {
+  const slug  = document.getElementById('f-slug').value || 'your-post-slug';
+  const date  = document.getElementById('f-date').value || 'Month YYYY';
+  const title = document.getElementById('post-title').innerText.trim() || 'Post title';
+  const td    = tagSel.map(t=>t.toLowerCase().replace(/[^a-z]/g,'-').replace(/-+/g,'-')).join(' ');
+  const ts    = tagSel.map(t=>`<span class="tag">${t}</span>`).join('');
+  document.getElementById('snippet').textContent =
+    `<a class="post-item reveal" href="writing/${slug}.html" data-tags="${td}">\n  <span class="post-item__date">${date}</span>\n  <span class="post-item__title">${title}</span>\n  <span class="post-item__tags">${ts}</span>\n  <span class="post-item__arrow">↗</span>\n</a>`;
+}
+
+/* ── Block creation ───────────────────────────────────── */
+let menuAnchor = null;
+
+function showBlockMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById('block-menu');
+  const r = e.target.getBoundingClientRect();
+  menu.style.left = r.left + 'px';
+  menu.style.top  = (r.top - menu.offsetHeight - 4) + 'px';
+  menu.classList.add('open');
+  setTimeout(() => {
+    // position after render
+    const mr = menu.getBoundingClientRect();
+    menu.style.top = (r.top - mr.height - 4) + 'px';
+  }, 0);
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#block-menu') && !e.target.closest('#add-btn')) {
+    document.getElementById('block-menu').classList.remove('open');
+  }
+});
+
+function insertBlock(type, value='', afterEl=null) {
+  const body = document.getElementById('post-body');
+  const div = document.createElement('div');
+  div.className = 'block';
+  div.dataset.type = type;
+  div.contentEditable = 'true';
+  div.spellcheck = true;
+  div.dataset.ph = TYPE_PH[type] || '';
+  if (value) div.textContent = value;
+
+  // Controls
+  const ctrl = document.createElement('div');
+  ctrl.className = 'block-ctrl';
+  ctrl.contentEditable = 'false';
+  const sel = document.createElement('select');
+  sel.title = 'Block type';
+  Object.entries(TYPE_LABELS).forEach(([k,v]) => {
+    const o = document.createElement('option');
+    o.value = k; o.textContent = v;
+    if (k === type) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', () => { div.dataset.type = sel.value; div.dataset.ph = TYPE_PH[sel.value]||''; markDirty(); });
+  const del = document.createElement('button');
+  del.className = 'block-del'; del.textContent = '×'; del.title = 'Delete block';
+  del.addEventListener('click', () => { div.remove(); markDirty(); });
+  ctrl.appendChild(sel); ctrl.appendChild(del);
+  div.appendChild(ctrl);
+
+  div.addEventListener('input', () => { markDirty(); updateSnippet(); });
+  div.addEventListener('keydown', handleBlockKey);
+
+  if (afterEl) afterEl.insertAdjacentElement('afterend', div);
+  else body.appendChild(div);
+
+  // Focus at end
+  requestAnimationFrame(() => {
+    div.focus();
+    const r = document.createRange(), s = window.getSelection();
+    r.selectNodeContents(div);
+    r.collapse(false);
+    s.removeAllRanges(); s.addRange(r);
+  });
+  return div;
+}
+
+function handleBlockKey(e) {
+  const div = e.currentTarget;
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    const type = div.dataset.type === 'li' ? 'li' : 'p';
+    insertBlock(type, '', div);
+  }
+  if (e.key === 'Backspace') {
+    // If empty block and not the only one, delete it
+    const text = div.innerText.replace(/\n/g,'').trim();
+    if (!text) {
+      const prev = div.previousElementSibling;
+      div.remove();
+      if (prev && prev.classList.contains('block')) {
+        prev.focus();
+        const r = document.createRange(), s = window.getSelection();
+        r.selectNodeContents(prev); r.collapse(false);
+        s.removeAllRanges(); s.addRange(r);
+      }
+      e.preventDefault();
+      markDirty();
+    }
+  }
+}
+
+/* ── Dirty / clean ────────────────────────────────────── */
+function markDirty() {
+  isDirty = true;
+  document.getElementById('bar-file').classList.add('unsaved');
+  if (fileHandle) document.getElementById('btn-save').disabled = false;
+}
+function markClean() {
+  isDirty = false;
+  document.getElementById('bar-file').classList.remove('unsaved');
+}
+
+/* ── New post ─────────────────────────────────────────── */
+function newPost() {
+  if (isDirty && !confirm('Discard unsaved changes?')) return;
+  document.getElementById('post-title').textContent = '';
+  document.getElementById('post-lede').textContent  = '';
+  document.getElementById('post-body').innerHTML    = '';
+  document.getElementById('f-date').value  = '';
+  document.getElementById('f-slug').value  = '';
+  document.getElementById('f-slug')._touched = false;
+  tagSel = [];
+  document.querySelectorAll('.tag-btn').forEach(b=>b.classList.remove('on'));
+  fileHandle = null;
+  document.getElementById('bar-file').textContent = 'New post';
+  document.getElementById('btn-save').disabled = true;
+  document.querySelectorAll('.draft-item').forEach(el=>el.classList.remove('active'));
+  insertBlock('p'); updateMeta(); markClean();
+}
+
+/* ── Canvas click (close menus) ───────────────────────── */
+function canvasClick(e) {
+  if (!e.target.closest('.block-menu')) {
+    document.getElementById('block-menu').classList.remove('open');
+  }
+}
+
+/* ── Folder / FS API ──────────────────────────────────── */
+async function openFolder() {
+  if (!HAS_FS) return;
+  try {
+    dirHandle = await window.showDirectoryPicker({ mode:'readwrite' });
+    document.getElementById('btn-folder').textContent = 'Change folder';
+    await refreshDraftList();
+    toast('Opened — ' + dirHandle.name);
+  } catch(e) { if (e.name !== 'AbortError') toast('Could not open folder'); }
+}
+
+async function refreshDraftList() {
+  if (!dirHandle) return;
+  fileHandles = {};
+  const list = document.getElementById('drafts-list');
+  list.innerHTML = '';
+  document.getElementById('drafts-empty').style.display = 'none';
+  const entries = [];
+  for await (const [name, handle] of dirHandle.entries()) {
+    if (handle.kind === 'file' && name.endsWith('.html') && !name.startsWith('_')) {
+      entries.push([name, handle]);
+    }
+  }
+  entries.sort((a,b) => a[0].localeCompare(b[0]));
+  if (!entries.length) { list.innerHTML = '<div class="drafts__empty">No posts found.</div>'; return; }
+  entries.forEach(([name, handle]) => {
+    fileHandles[name] = handle;
+    const item = document.createElement('div');
+    item.className = 'draft-item'; item.dataset.name = name;
+    item.innerHTML = `<span class="draft-item__dot">—</span><span class="draft-item__name">${name.replace('.html','')}</span>`;
+    item.addEventListener('click', () => loadByName(name));
+    list.appendChild(item);
+  });
+}
+
+async function loadByName(name) {
+  if (isDirty && !confirm('Discard unsaved changes?')) return;
+  const handle = fileHandles[name];
+  if (!handle) return;
+  try {
+    const file = await handle.getFile();
+    populateFromHTML(await file.text(), name.replace('.html',''), handle);
+    document.querySelectorAll('.draft-item').forEach(el=>el.classList.remove('active'));
+    document.querySelector(`.draft-item[data-name="${name}"]`)?.classList.add('active');
+  } catch(e) { toast('Error loading file'); }
+}
+
+/* ── Upload fallback ──────────────────────────────────── */
+function handleUpload(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => populateFromHTML(e.target.result, file.name.replace('.html',''), null);
+  reader.readAsText(file);
+  input.value = '';
+}
+
+/* ── Parse existing post HTML ─────────────────────────── */
+function populateFromHTML(html, slug, handle) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const title = doc.querySelector('h1.post__title')?.textContent?.trim() || '';
+  const date  = doc.querySelector('.post__date')?.textContent?.trim() || '';
+  const lede  = doc.querySelector('.post__lede')?.textContent?.trim() || '';
+  const tags  = [...doc.querySelectorAll('.post__tags .tag')].map(t=>t.textContent.trim());
+
+  document.getElementById('post-title').textContent = title;
+  document.getElementById('post-lede').textContent  = lede;
+  document.getElementById('f-date').value  = date;
+  document.getElementById('f-slug').value  = slug;
+  document.getElementById('f-slug')._touched = true;
+
+  tagSel = [];
+  document.querySelectorAll('.tag-btn').forEach(b => {
+    b.classList.remove('on');
+    if (tags.includes(b.dataset.tag)) { tagSel.push(b.dataset.tag); b.classList.add('on'); }
+  });
+
+  // Body blocks
+  document.getElementById('post-body').innerHTML = '';
+  const bodyEl = doc.querySelector('.post__body');
+  if (bodyEl) {
+    bodyEl.childNodes.forEach(node => {
+      if (node.nodeType !== 1) return;
+      const tag = node.tagName.toLowerCase();
+      if      (tag === 'p')           insertBlock('p',          node.textContent.trim());
+      else if (tag === 'h2')          insertBlock('h2',         node.textContent.trim());
+      else if (tag === 'h3')          insertBlock('h3',         node.textContent.trim());
+      else if (tag === 'blockquote')  insertBlock('blockquote', node.textContent.trim());
+      else if (tag === 'ul') node.querySelectorAll('li').forEach(li => insertBlock('li', li.textContent.trim()));
+    });
+  }
+  if (!document.getElementById('post-body').children.length) insertBlock('p');
+
+  fileHandle = handle;
+  document.getElementById('bar-file').textContent = slug + '.html';
+  document.getElementById('btn-save').disabled = !handle;
+  updateMeta(); markClean();
+  toast('Loaded ' + slug + '.html');
+}
+
+/* ── Save ─────────────────────────────────────────────── */
+async function saveFile() {
+  if (!fileHandle) return;
+  try {
+    const w = await fileHandle.createWritable();
+    await w.write(generateHTML()); await w.close();
+    markClean(); toast('Saved ✓');
+  } catch(e) { toast('Save failed — use Download'); }
+}
+
+/* ── Download ─────────────────────────────────────────── */
+function downloadHTML() {
+  const slug = document.getElementById('f-slug').value || 'post';
+  const blob = new Blob([generateHTML()], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = slug + '.html'; a.click();
+  markClean(); toast('Downloaded ' + slug + '.html');
+}
+
+/* ── Generate HTML ────────────────────────────────────── */
+function generateHTML() {
+  const title = document.getElementById('post-title').innerText.trim() || 'Untitled';
+  const lede  = document.getElementById('post-lede').innerText.trim() || '';
+  const date  = document.getElementById('f-date').value || 'Month YYYY';
+  const tagSpans = tagSel.map(t=>`        <span class="tag">${esc(t)}</span>`).join('\n');
+
+  // Serialize blocks
+  let bodyHTML = ''; let inList = false;
+  document.querySelectorAll('#post-body .block').forEach((el, idx, all) => {
+    const type = el.dataset.type;
+    const next = all[idx+1]?.dataset?.type;
+    const v = esc(el.innerText.replace(/\n/g,' ').trim());
+    if (type === 'li') {
+      if (!inList) { bodyHTML += '      <ul>\n'; inList = true; }
+      bodyHTML += `        <li>${v}</li>\n`;
+      if (next !== 'li') { bodyHTML += '      </ul>\n\n'; inList = false; }
+    } else {
+      if (inList) { bodyHTML += '      </ul>\n\n'; inList = false; }
+      if      (type === 'p')          bodyHTML += `      <p>${v}</p>\n\n`;
+      else if (type === 'h2')         bodyHTML += `      <h2>${v}</h2>\n\n`;
+      else if (type === 'h3')         bodyHTML += `      <h3>${v}</h3>\n\n`;
+      else if (type === 'blockquote') bodyHTML += `      <blockquote>\n        ${v}\n      </blockquote>\n\n`;
+    }
+  });
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${esc(title)} — Ashi Sheth</title>
+  <meta name="description" content="${esc(lede.slice(0,160))}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#F7F6F3;--ink:#0E0E0E;--muted:#787570;--rule:#DEDAD4;--font:'Zen Kaku Gothic New',sans-serif;--track:0.12em;--track-lg:0.18em;--rail-w:1px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 3rem;background:var(--bg);border-bottom:var(--rail-w) solid var(--rule);}
+    .nav__name{font-size:0.8rem;font-weight:500;letter-spacing:var(--track-lg);text-transform:uppercase;}
+    .nav__links{display:flex;gap:2.5rem;list-style:none;}
+    .nav__links a{font-size:0.75rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);transition:color 0.2s;}
+    .nav__links a:hover{color:var(--ink);}
+    .post{max-width:720px;margin:0 auto;padding:9rem 3rem 7rem;}
+    .post__back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.7rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);margin-bottom:3rem;transition:color 0.2s;}
+    .post__back:hover{color:var(--ink);}
+    .post__back::before{content:'←';}
+    .post__meta{display:flex;gap:1.5rem;align-items:center;margin-bottom:2rem;}
+    .post__date{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    .post__tags{display:flex;gap:0.4rem;}
+    .tag{font-size:0.62rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);border:var(--rail-w) solid var(--rule);padding:0.2rem 0.55rem;}
+    .post__title{font-size:clamp(2rem,4vw,3.2rem);font-weight:500;line-height:1.12;letter-spacing:-0.02em;margin-bottom:2rem;}
+    .post__lede{font-size:1.15rem;color:var(--muted);line-height:1.75;padding-bottom:2.5rem;border-bottom:var(--rail-w) solid var(--rule);margin-bottom:2.5rem;}
+    .post__body{font-size:1rem;line-height:1.85;}
+    .post__body p{margin-bottom:1.5rem;}
+    .post__body h2{font-size:1.15rem;font-weight:500;letter-spacing:-0.01em;margin:2.5rem 0 1rem;}
+    .post__body h3{font-size:0.8rem;font-weight:500;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);margin:2rem 0 0.75rem;}
+    .post__body blockquote{border-left:var(--rail-w) solid var(--ink);padding-left:1.5rem;margin:2rem 0;font-size:1.1rem;color:var(--muted);line-height:1.7;}
+    .post__body ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;}
+    .post__body li{padding-left:1.25em;position:relative;font-size:1rem;line-height:1.75;}
+    .post__body li::before{content:'—';position:absolute;left:0;color:var(--rule);}
+    .post__body strong{font-weight:500;}
+    .post__body em{font-style:italic;color:var(--muted);}
+    .post__footer{margin-top:4rem;padding-top:2.5rem;border-top:var(--rail-w) solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .post__footer-back{font-size:0.7rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);transition:color 0.2s;display:flex;align-items:center;gap:0.5rem;}
+    .post__footer-back::before{content:'←';}
+    .post__footer-back:hover{color:var(--ink);}
+    .post__author{text-align:right;}
+    .post__author-name{font-size:0.8rem;font-weight:500;}
+    .post__author-role{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    .footer{border-top:var(--rail-w) solid var(--rule);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;}
+    .footer__left,.footer__right{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    @media(max-width:768px){.nav{padding:1.25rem 1.5rem;}.nav__links{display:none;}.post{padding:7rem 1.5rem 5rem;}.footer{flex-direction:column;gap:0.5rem;padding:2rem 1.5rem;}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav__name" href="../ashi-sheth.html">Ashi Sheth</a>
+    <ul class="nav__links">
+      <li><a href="../ashi-sheth.html#about">About</a></li>
+      <li><a href="../experience.html">Experience</a></li>
+      <li><a href="../ashi-sheth.html#offering">Advisory</a></li>
+      <li><a href="../writing.html">Writing</a></li>
+      <li><a href="../ashi-sheth.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <article class="post">
+    <a class="post__back" href="../writing.html">All writing</a>
+    <div class="post__meta">
+      <span class="post__date">${esc(date)}</span>
+      <div class="post__tags">
+${tagSpans}
+      </div>
+    </div>
+    <h1 class="post__title">${esc(title)}</h1>
+    <p class="post__lede">${esc(lede)}</p>
+    <div class="post__body">
+${bodyHTML}    </div>
+    <div class="post__footer">
+      <a class="post__footer-back" href="../writing.html">All writing</a>
+      <div class="post__author">
+        <div class="post__author-name">Ashi Sheth</div>
+        <div class="post__author-role">Technology Advisor</div>
+      </div>
+    </div>
+  </article>
+  <footer class="footer">
+    <span class="footer__left">Ashi Sheth · Writing</span>
+    <span class="footer__right"><a href="../ashi-sheth.html">ashisheth.com</a></span>
+  </footer>
+</body>
+</html>`;
+}
+
+/* ── Helpers ──────────────────────────────────────────── */
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function copySnippet() {
+  navigator.clipboard.writeText(document.getElementById('snippet').textContent)
+    .then(() => toast('Snippet copied'));
+}
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My people are still there. I'm the one who left. — Ashi Sheth</title>
+  <meta name="description" content="Six months after leaving LinkedIn, I'm still figuring out what my days are worth, what I'm contributing, and what it means to be on the outside of a world that " />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#F7F6F3;--ink:#0E0E0E;--muted:#787570;--rule:#DEDAD4;--font:'Zen Kaku Gothic New',sans-serif;--track:0.12em;--track-lg:0.18em;--rail-w:1px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 3rem;background:var(--bg);border-bottom:var(--rail-w) solid var(--rule);}
+    .nav__name{font-size:0.8rem;font-weight:500;letter-spacing:var(--track-lg);text-transform:uppercase;}
+    .nav__links{display:flex;gap:2.5rem;list-style:none;}
+    .nav__links a{font-size:0.75rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);transition:color 0.2s;}
+    .nav__links a:hover{color:var(--ink);}
+    .post{max-width:720px;margin:0 auto;padding:9rem 3rem 7rem;}
+    .post__back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.7rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);margin-bottom:3rem;transition:color 0.2s;}
+    .post__back:hover{color:var(--ink);}
+    .post__back::before{content:'←';}
+    .post__meta{display:flex;gap:1.5rem;align-items:center;margin-bottom:2rem;}
+    .post__date{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    .post__tags{display:flex;gap:0.4rem;}
+    .tag{font-size:0.62rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);border:var(--rail-w) solid var(--rule);padding:0.2rem 0.55rem;}
+    .post__title{font-size:clamp(2rem,4vw,3.2rem);font-weight:500;line-height:1.12;letter-spacing:-0.02em;margin-bottom:2rem;}
+    .post__lede{font-size:1.15rem;color:var(--muted);line-height:1.75;padding-bottom:2.5rem;border-bottom:var(--rail-w) solid var(--rule);margin-bottom:2.5rem;}
+    .post__body{font-size:1rem;line-height:1.85;}
+    .post__body p{margin-bottom:1.5rem;}
+    .post__body h2{font-size:1.15rem;font-weight:500;letter-spacing:-0.01em;margin:2.5rem 0 1rem;}
+    .post__body h3{font-size:0.8rem;font-weight:500;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);margin:2rem 0 0.75rem;}
+    .post__body blockquote{border-left:var(--rail-w) solid var(--ink);padding-left:1.5rem;margin:2rem 0;font-size:1.1rem;color:var(--muted);line-height:1.7;}
+    .post__body ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;}
+    .post__body li{padding-left:1.25em;position:relative;font-size:1rem;line-height:1.75;}
+    .post__body li::before{content:'—';position:absolute;left:0;color:var(--rule);}
+    .post__body strong{font-weight:500;}
+    .post__body em{font-style:italic;color:var(--muted);}
+    .post__footer{margin-top:4rem;padding-top:2.5rem;border-top:var(--rail-w) solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .post__footer-back{font-size:0.7rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);transition:color 0.2s;display:flex;align-items:center;gap:0.5rem;}
+    .post__footer-back::before{content:'←';}
+    .post__footer-back:hover{color:var(--ink);}
+    .post__author{text-align:right;}
+    .post__author-name{font-size:0.8rem;font-weight:500;}
+    .post__author-role{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    .footer{border-top:var(--rail-w) solid var(--rule);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;}
+    .footer__left,.footer__right{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    @media(max-width:768px){.nav{padding:1.25rem 1.5rem;}.nav__links{display:none;}.post{padding:7rem 1.5rem 5rem;}.footer{flex-direction:column;gap:0.5rem;padding:2rem 1.5rem;}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav__name" href="../ashi-sheth.html">Ashi Sheth</a>
+    <ul class="nav__links">
+      <li><a href="../ashi-sheth.html#about">About</a></li>
+      <li><a href="../experience.html">Experience</a></li>
+      <li><a href="../ashi-sheth.html#offering">Advisory</a></li>
+      <li><a href="../writing.html">Writing</a></li>
+      <li><a href="../ashi-sheth.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <article class="post">
+    <a class="post__back" href="../writing.html">All writing</a>
+    <div class="post__meta">
+      <span class="post__date">June 2025</span>
+      <div class="post__tags">
+        <span class="tag">Leadership</span>
+        <span class="tag">Culture</span>
+      </div>
+    </div>
+    <h1 class="post__title">My people are still there. I'm the one who left.</h1>
+    <p class="post__lede">Six months after leaving LinkedIn, I'm still figuring out what my days are worth, what I'm contributing, and what it means to be on the outside of a world that keeps turning without you. This is an honest account of what nobody tells you about leaving a community you helped build.</p>
+    <div class="post__body">
+      <p>The feeling I come back to most often isn't regret. It isn't relief. It's something closer to missing; a specific, low-grade ache for the people I used to talk to every day. For them, the world kept revolving. New problems to solve, new projects to ship, new crises to manage. For me, it all stopped, and I've been standing still trying to figure out what to do with the silence.</p>
+
+      <p>There are days I feel lonely. Days I feel out of the loop. Days where I scroll past something in my feed about what's happening at LinkedIn and feel the specific sting of the person who used to be in the room and no longer is. LinkedIn opened a new office in Bangalore this week, in the past - I would have been involved with something like this through my team. Ideally, I would have visited it around the time of its opening. Now? I'm just another person on LinkedIn seeing it happen.</p>
+
+      <h2>What the community actually was</h2>
+
+      <p>When people talk about company culture, they usually mean the values on the wall or the way leadership talks in all-hands meetings. That's not what I mean. What I mean is the people I'd worked alongside for years through organizational upheaval, through the highs and the lows that only people who've been in the trenches together actually understand. In some cases, it was with people across multiple companies.</p>
+
+      <p>I mean the team member in Dublin whose actual daily life — the way she navigated her office, her commute, her relationship with her manager — was completely different from the colleague in Hong Kong or Sunnyvale or New York. Visiting them wasn't just a business trip. It was stepping into their world. Understanding that there is a corporate culture, and a team culture, and then there is the physical, national, human culture of how someone actually lives. I loved that part. I referred it as &quot;eating at their table&quot; or &quot;staying at their house&quot;. That's how you really learn about the person and what they're experiencing.</p>
+
+      <p>Being part of something being built together. Watching people grow. Coaching someone through a hard moment and then watching them deliver something meaningful. That was joy, for me. Not a single thing it was all of it, woven together in a way I didn't fully appreciate until it was gone.</p>
+
+      <h2>The moments I knew it was time to leave</h2>
+
+      <p>There wasn't one. There were many, but here's three that really stood out.</p>
+
+      <p>In January of 2025, I was having a conversation with my leader Niha about how difficult things had become. She acknowledged it was hard and also named the things I needed to focus on for myself. I'd already been quietly asking whether I was finding joy in my work. That conversation brought it to the surface and we spent time discussing what that looked like for me. We also had an honest conversation about whether I was meeting her keeper test because I wasn't fulfilling it for myself.</p>
+
+      <p>Also around that same time in early 2025, I was working from home one day and I came downstairs from my home office to grab something from the fridge. I had just gotten off a series of calls that were just normal run-of-the day 1:1s, project meetings, etc. When I got downstairs and stopped to check in on my wife - before I had even said a word, my wife looked at me and matter-of-factly said I should find another job. She said that it was obvious I wasn't happy.  I deflected.  I told her I was just in a funk, that I'd been here before, that I wasn't ready to give up without a fight.  I pushed back on her clarity.  Ultimately - she was right.</p>
+
+      <p>The third moment was at the end of a 10 day work trip to Bangalore and Singapore. It's the last night in Singapore around 9:30 in the evening. Everyone else had called it a day. I sent a message into a small group chat to see if anyone wanted to hang out. Sabry, my SVP who I've known and worked closely with for over twelve years, came down. We sat at the hotel bar for a couple of hours and talked through what I was actually thinking and feeling. By that point I'd already begun planning my exit with Niha and Sabry, but that conversation made it undeniable. What I wanted to do and what was expected of me were no longer in complete alignment. That gap had become the whole thing.</p>
+
+      <h2>Who I miss, and how</h2>
+
+      <p>I miss many people from my community at work. Some of them I still chat with regularly; some far less often than I should. That thread of connection matters more than I could have anticipated.</p>
+
+      <p>I think about the people on my team - people I worked with for multiple years. The company is going through significant changes right now, one after another, and I know it's creating confusion and uncertainty. I think about what I would have done for them in those moments. Some of them I still chat with over text or a phone call. Some we make time to see each other for dinner occasionally, and those evenings are genuinely joyful — warm and grounding in a way that's hard to describe. Some of them are questioning whether to stay or leave. I listen. It's the most useful thing I can offer from here.</p>
+
+      <p>And I think about Niha in a different way. We paired well together on a personality and skill level. But I carry the feeling that I could have been more useful to her than I was. That's not guilt, exactly. It's something more like unfinished care. A door I didn't fully walk through before it closed.</p>
+
+      <h2>The surprise</h2>
+
+      <p>I thought I knew what the transition would feel like. I was wrong about almost all of it.</p>
+
+      <p>I assumed I'd establish a routine quickly. I haven't. I've been working in some form since 1991, and I have no idea how to not work. The structure was always just there. It was given to me by the job, the team, the calendar, the demands of the day. Without it now, I don't always know what I accomplished. Some days I genuinely can't tell if I did anything other than sit on the couch.</p>
+
+      <p>I thought I'd travel more. Exercise consistently. Read. Six months in, I'm finally getting to the exercise part with any regularity. The travel has been purposeful like visiting our new granddaughter in Houston, then our two-year-old granddaughter that was in Phoenix before she and her parents moved to the UK in May but it hasn't been the expansive, exploratory travel I'd imagined for my wife and I.</p>
+
+      <p>So much of my sense of community was built on shared work experiences. When you're no longer sharing them, the community doesn't disappear but the daily texture of it does. And I underestimated how much of me lived in that texture.</p>
+
+      <h2>What I lost — and what I can't quite name</h2>
+
+      <p>If someone asked me to put into one word what I lost when I left, I'd give them five: purpose, identity, community, intent, explicit goals — even the ones I disagreed with. The goals gave shape to the days. The identity told me what I was for. The community told me I wasn't alone.</p>
+
+      <p>The fact that I can't compress it into one word is probably telling in itself. They were all tangled together, inside the same thing, and I didn't fully understand that until I was on the outside of it.</p>
+
+      <h2>What I'd tell someone standing at the edge</h2>
+
+      <p>If one of my former team members called me tonight and asked what's waiting on the other side of leaving — I'd tell them this:</p>
+
+      <blockquote>
+        Peace exists here. But routine is critical, and purpose is a must-have — or you will find yourself on the couch, losing track of time, unsure of what the day was for.
+      </blockquote>
+
+      <p>The peace is real. The disorientation is also real. Both things are true, and nobody tells you that clearly enough before you go.</p>
+
+      <h2>What a good day looks like now</h2>
+
+      <p>I've been thinking about this a lot. Not the ideal day,  just a good one. What it actually looks like when things are working.</p>
+
+      <p>It looks like waking up when my body is ready. Moving...actually moving, not just intending to. Playing with the dogs. Sharing life with my wife and our middle daughter who currently lives at home with us. Planning a trip somewhere we've never been. And at the end of it, sleeping without the weight of stress or self-doubt pressing down.</p>
+
+      <p>That's it. That's the whole thing I'm working toward.</p>
+
+      <p>I'm not there yet. Not consistently. But I can almost see it from here. And the people I'm missing? They're part of what makes me want to get there. Not because they're watching, but because caring about people - about their growth, their struggles, their everyday worlds - turns out to be the thing I'm made of.</p>
+
+      <p>I just have to figure out how to do it from this side of the door now.</p>
+
+    </div>
+    <div class="post__footer">
+      <a class="post__footer-back" href="../writing.html">All writing</a>
+      <div class="post__author">
+        <div class="post__author-name">Ashi Sheth</div>
+        <div class="post__author-role">Technology Advisor</div>
+      </div>
+    </div>
+  </article>
+  <footer class="footer">
+    <span class="footer__left">Ashi Sheth · Writing</span>
+    <span class="footer__right"><a href="../ashi-sheth.html">ashisheth.com</a></span>
+  </footer>
+</body>
+</html>
