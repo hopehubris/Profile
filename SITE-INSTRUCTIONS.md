@@ -230,7 +230,6 @@ In `docs/index.html`, find the Contact section and update:
 ```html
 <a class="contact__link" href="mailto:your@email.com">
 <a class="contact__link" href="https://linkedin.com/in/yourhandle">
-<a class="contact__link" href="tel:+11234567890">
 ```
 
 The same links appear in the footer of every post file (`docs/writing/*.html`). Update those too.
