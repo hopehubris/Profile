@@ -6,14 +6,15 @@
 ## Site Structure
 
 ```
-ashi-sheth.html          ← Main site (home, about, experience, advisory, contact)
-writing.html             ← Writing index (list of all posts)
-writing/
-  _post-template.html    ← Blank template — copy this for every new post
+docs/index.html          ← Main site (home, about, experience, advisory, contact)
+docs/writing.html        ← Writing index (list of all posts)
+docs/writing/
   on-inheriting-broken-teams.html
   ai-automation-what-we-actually-built.html
   what-chros-actually-need.html
   [your-future-posts].html
+templates/
+  _post-template.html    ← Blank template — copy this for every new post
 ```
 
 All files are plain HTML. No build tools, no frameworks, no dependencies beyond a Google Fonts link. Open any file in a browser to preview it locally before publishing.
@@ -24,10 +25,10 @@ All files are plain HTML. No build tools, no frameworks, no dependencies beyond 
 
 ### Step 1 — Copy the template
 
-Duplicate `writing/_post-template.html` and rename it using your post's slug:
+Duplicate `templates/_post-template.html` into `docs/writing/` and rename it using your post's slug:
 
 ```
-writing/your-post-title-in-lowercase-with-hyphens.html
+docs/writing/your-post-title-in-lowercase-with-hyphens.html
 ```
 
 **Slug rules:**
@@ -38,9 +39,9 @@ writing/your-post-title-in-lowercase-with-hyphens.html
 
 **Examples:**
 ```
-writing/why-hr-tech-consolidations-fail.html
-writing/what-pe-firms-get-wrong-about-it.html
-writing/the-real-cost-of-a-bad-vendor-contract.html
+docs/writing/why-hr-tech-consolidations-fail.html
+docs/writing/what-pe-firms-get-wrong-about-it.html
+docs/writing/the-real-cost-of-a-bad-vendor-contract.html
 ```
 
 ---
@@ -141,9 +142,9 @@ Note: the stat-row CSS is only included in `ai-automation-what-we-actually-built
 
 ---
 
-### Step 4 — Add the post to writing.html
+### Step 4 — Add the post to docs/writing.html
 
-Open `writing.html` and find the comment that says:
+Open `docs/writing.html` and find the comment that says:
 
 ```html
 <!-- ─── ADD NEW POSTS ABOVE THIS LINE ─── -->
@@ -182,7 +183,7 @@ data-tags="leadership culture"
 
 ### Step 5 — Update the teaser on the main site (optional)
 
-`ashi-sheth.html` shows a teaser of your 3 most recent posts. When you publish something new, update that section to keep it current.
+`docs/index.html` shows a teaser of your 3 most recent posts. When you publish something new, update that section to keep it current.
 
 Find the writing teaser section (search for `id="writing"`) and update the three `<a class="writing-teaser__item">` entries to reflect your latest posts. Keep it to exactly 3 — newest at the top.
 
@@ -201,9 +202,9 @@ Find the writing teaser section (search for `id="writing"`) and update the three
 Upload the changed files to your host. If you're using Netlify (recommended), drag the entire folder onto the Netlify dashboard. Only changed files need to be re-uploaded if you're using FTP.
 
 **Files to upload after adding a new post:**
-- `writing/your-new-post.html` (always)
-- `writing.html` (always — the index changed)
-- `ashi-sheth.html` (if you updated the teaser)
+- `docs/writing/your-new-post.html` (always)
+- `docs/writing.html` (always — the index changed)
+- `docs/index.html` (if you updated the teaser)
 
 ---
 
@@ -211,7 +212,7 @@ Upload the changed files to your host. If you're using Netlify (recommended), dr
 
 ### Updating the main site (bio, experience, advisory services)
 
-Open `ashi-sheth.html` in a text editor. The sections are clearly marked with HTML comments:
+Open `docs/index.html` in a text editor. The sections are clearly marked with HTML comments:
 
 ```
 <!-- ─── About ─── -->
@@ -225,14 +226,14 @@ Find the section you want to edit and update the text between the HTML tags. Don
 
 ### Updating contact details
 
-In `ashi-sheth.html`, find the Contact section and update:
+In `docs/index.html`, find the Contact section and update:
 ```html
 <a class="contact__link" href="mailto:your@email.com">
 <a class="contact__link" href="https://linkedin.com/in/yourhandle">
 <a class="contact__link" href="tel:+11234567890">
 ```
 
-The same links appear in the footer of every post file (`writing/*.html`). Update those too.
+The same links appear in the footer of every post file (`docs/writing/*.html`). Update those too.
 
 ### Adding a new advisory service or experience role
 
@@ -246,7 +247,7 @@ The same links appear in the footer of every post file (`writing/*.html`). Updat
 
 If you want to add a new filter category to the writing index (e.g. "Operations" or "Speaking"):
 
-**In `writing.html`, add a new filter button:**
+**In `docs/writing.html`, add a new filter button:**
 ```html
 <button class="filter-btn" data-filter="operations">Operations</button>
 ```
@@ -290,14 +291,14 @@ Keep changes minimal. The design works because of restraint.
 
 Before you upload, run through this:
 
-- [ ] File saved in `writing/` with a hyphenated lowercase slug
+- [ ] File saved in `docs/writing/` with a hyphenated lowercase slug
 - [ ] `<title>` updated with the post title
 - [ ] `<meta name="description">` filled in (1–2 sentences)
 - [ ] Date, tags, title, and lede all updated
 - [ ] Post body written and proofread
-- [ ] New row added to `writing.html` (newest at top)
+- [ ] New row added to `docs/writing.html` (newest at top)
 - [ ] `data-tags` attribute matches the filter categories
-- [ ] Writing teaser on `ashi-sheth.html` updated if this is one of your 3 most recent
+- [ ] Writing teaser on `docs/index.html` updated if this is one of your 3 most recent
 - [ ] All files uploaded to host
 
 ---
