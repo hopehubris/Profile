@@ -3,163 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>What I learned being the sixth IT leader in four years — Ashi Sheth</title>
-  <meta name="description" content="On arriving into an organization that's been through five IT leaders in four years, and what it takes to be the one who stays." />
+  <title>What I learned being the fifth IT leader in six years — Ashi Sheth</title>
+  <meta name="description" content="In 2005, I joined American University of Sharjah as Director of IT. The organization had seen four IT leaders come and go in the five years before I arrived. I " />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg:       #F7F6F3;
-      --ink:      #0E0E0E;
-      --muted:    #787570;
-      --rule:     #DEDAD4;
-      --font:     'Zen Kaku Gothic New', sans-serif;
-      --track:    0.12em;
-      --track-lg: 0.18em;
-      --rail-w:   1px;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--ink);
-      font-size: 16px;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; text-decoration: none; }
-
-    /* Nav */
-    .nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.5rem 3rem;
-      background: var(--bg);
-      border-bottom: var(--rail-w) solid var(--rule);
-    }
-    .nav__name { font-size: 0.8rem; font-weight: 500; letter-spacing: var(--track-lg); text-transform: uppercase; }
-    .nav__links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav__links a { font-size: 0.75rem; letter-spacing: var(--track-lg); text-transform: uppercase; color: var(--muted); transition: color 0.2s; }
-    .nav__links a:hover { color: var(--ink); }
-
-    /* Post layout */
-    .post {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 9rem 3rem 7rem;
-    }
-
-    /* Header */
-    .post__back {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-size: 0.7rem; letter-spacing: var(--track-lg); text-transform: uppercase;
-      color: var(--muted); margin-bottom: 3rem;
-      transition: color 0.2s;
-    }
-    .post__back:hover { color: var(--ink); }
-    .post__back::before { content: '←'; }
-    .post__meta {
-      display: flex; gap: 1.5rem; align-items: center;
-      margin-bottom: 2rem;
-    }
-    .post__date { font-size: 0.7rem; letter-spacing: var(--track); text-transform: uppercase; color: var(--muted); }
-    .post__tags { display: flex; gap: 0.4rem; }
-    .tag {
-      font-size: 0.62rem; letter-spacing: var(--track); text-transform: uppercase;
-      color: var(--muted); border: var(--rail-w) solid var(--rule); padding: 0.2rem 0.55rem;
-    }
-    .post__title {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 500;
-      line-height: 1.12;
-      letter-spacing: -0.02em;
-      margin-bottom: 2rem;
-    }
-    .post__lede {
-      font-size: 1.15rem;
-      color: var(--muted);
-      line-height: 1.75;
-      padding-bottom: 2.5rem;
-      border-bottom: var(--rail-w) solid var(--rule);
-      margin-bottom: 2.5rem;
-    }
-
-    /* Body */
-    .post__body { font-size: 1rem; line-height: 1.85; }
-    .post__body p { margin-bottom: 1.5rem; }
-    .post__body h2 {
-      font-size: 1.15rem; font-weight: 500; letter-spacing: -0.01em;
-      margin: 2.5rem 0 1rem;
-    }
-    .post__body h3 {
-      font-size: 0.8rem; font-weight: 500; letter-spacing: var(--track-lg);
-      text-transform: uppercase; color: var(--muted);
-      margin: 2rem 0 0.75rem;
-    }
-    .post__body blockquote {
-      border-left: var(--rail-w) solid var(--ink);
-      padding-left: 1.5rem;
-      margin: 2rem 0;
-      font-size: 1.1rem;
-      color: var(--muted);
-      line-height: 1.7;
-      font-style: normal;
-    }
-    .post__body ul, .post__body ol {
-      padding-left: 0; list-style: none;
-      display: flex; flex-direction: column; gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .post__body li {
-      padding-left: 1.25em; position: relative; font-size: 1rem; line-height: 1.75;
-    }
-    .post__body li::before { content: '—'; position: absolute; left: 0; color: var(--rule); }
-    .post__body strong { font-weight: 500; }
-    .post__body em { font-style: italic; color: var(--muted); }
-
-    /* Footer / nav */
-    .post__footer {
-      margin-top: 4rem;
-      padding-top: 2.5rem;
-      border-top: var(--rail-w) solid var(--rule);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .post__footer-back {
-      font-size: 0.7rem; letter-spacing: var(--track-lg); text-transform: uppercase;
-      color: var(--muted); transition: color 0.2s;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-    .post__footer-back::before { content: '←'; }
-    .post__footer-back:hover { color: var(--ink); }
-    .post__author {
-      text-align: right;
-    }
-    .post__author-name { font-size: 0.8rem; font-weight: 500; }
-    .post__author-role { font-size: 0.7rem; letter-spacing: var(--track); text-transform: uppercase; color: var(--muted); }
-
-    /* Site footer */
-    .footer {
-      border-top: var(--rail-w) solid var(--rule);
-      padding: 2.5rem 3rem;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .footer__left, .footer__right {
-      font-size: 0.7rem; letter-spacing: var(--track); text-transform: uppercase; color: var(--muted);
-    }
-
-    @media (max-width: 768px) {
-      .nav { padding: 1.25rem 1.5rem; }
-      .nav__links { display: none; }
-      .post { padding: 7rem 1.5rem 5rem; }
-      .footer { flex-direction: column; gap: 0.5rem; padding: 2rem 1.5rem; }
-    }
+    :root{--bg:#F7F6F3;--ink:#0E0E0E;--muted:#787570;--rule:#DEDAD4;--font:'Zen Kaku Gothic New',sans-serif;--track:0.12em;--track-lg:0.18em;--rail-w:1px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.5rem 3rem;background:var(--bg);border-bottom:var(--rail-w) solid var(--rule);}
+    .nav__name{font-size:0.8rem;font-weight:500;letter-spacing:var(--track-lg);text-transform:uppercase;}
+    .nav__links{display:flex;gap:2.5rem;list-style:none;}
+    .nav__links a{font-size:0.75rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);transition:color 0.2s;}
+    .nav__links a:hover{color:var(--ink);}
+    .post{max-width:720px;margin:0 auto;padding:9rem 3rem 7rem;}
+    .post__back{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.7rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);margin-bottom:3rem;transition:color 0.2s;}
+    .post__back:hover{color:var(--ink);}
+    .post__back::before{content:'←';}
+    .post__meta{display:flex;gap:1.5rem;align-items:center;margin-bottom:2rem;}
+    .post__date{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    .post__tags{display:flex;gap:0.4rem;}
+    .tag{font-size:0.62rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);border:var(--rail-w) solid var(--rule);padding:0.2rem 0.55rem;}
+    .post__title{font-size:clamp(2rem,4vw,3.2rem);font-weight:500;line-height:1.12;letter-spacing:-0.02em;margin-bottom:2rem;}
+    .post__lede{font-size:1.15rem;color:var(--muted);line-height:1.75;padding-bottom:2.5rem;border-bottom:var(--rail-w) solid var(--rule);margin-bottom:2.5rem;}
+    .post__body{font-size:1rem;line-height:1.85;}
+    .post__body p{margin-bottom:1.5rem;}
+    .post__body h2{font-size:1.15rem;font-weight:500;letter-spacing:-0.01em;margin:2.5rem 0 1rem;}
+    .post__body h3{font-size:0.8rem;font-weight:500;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);margin:2rem 0 0.75rem;}
+    .post__body blockquote{border-left:var(--rail-w) solid var(--ink);padding-left:1.5rem;margin:2rem 0;font-size:1.1rem;color:var(--muted);line-height:1.7;}
+    .post__body ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;}
+    .post__body li{padding-left:1.25em;position:relative;font-size:1rem;line-height:1.75;}
+    .post__body li::before{content:'—';position:absolute;left:0;color:var(--rule);}
+    .post__body strong{font-weight:500;}
+    .post__body em{font-style:italic;color:var(--muted);}
+    .post__footer{margin-top:4rem;padding-top:2.5rem;border-top:var(--rail-w) solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .post__footer-back{font-size:0.7rem;letter-spacing:var(--track-lg);text-transform:uppercase;color:var(--muted);transition:color 0.2s;display:flex;align-items:center;gap:0.5rem;}
+    .post__footer-back::before{content:'←';}
+    .post__footer-back:hover{color:var(--ink);}
+    .post__author{text-align:right;}
+    .post__author-name{font-size:0.8rem;font-weight:500;}
+    .post__author-role{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    .footer{border-top:var(--rail-w) solid var(--rule);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;}
+    .footer__left,.footer__right{font-size:0.7rem;letter-spacing:var(--track);text-transform:uppercase;color:var(--muted);}
+    @media(max-width:768px){.nav{padding:1.25rem 1.5rem;}.nav__links{display:none;}.post{padding:7rem 1.5rem 5rem;}.footer{flex-direction:column;gap:0.5rem;padding:2rem 1.5rem;}}
   </style>
 </head>
 <body>
-
   <nav class="nav">
     <a class="nav__name" href="../ashi-sheth.html">Ashi Sheth</a>
     <ul class="nav__links">
@@ -170,11 +61,8 @@
       <li><a href="../ashi-sheth.html#contact">Contact</a></li>
     </ul>
   </nav>
-
   <article class="post">
-
     <a class="post__back" href="../writing.html">All writing</a>
-
     <div class="post__meta">
       <span class="post__date">June 2025</span>
       <div class="post__tags">
@@ -182,134 +70,46 @@
         <span class="tag">Culture</span>
       </div>
     </div>
-
-    <h1 class="post__title">
-      What I learned being the sixth IT leader in four years
-    </h1>
-
-    <p class="post__lede">
-      In 2005, I joined American University of Sharjah as Director of IT.
-      The organization had seen five IT leaders come and go in the four years
-      before I arrived. I stayed for seven. Here's what I learned about why
-      that happened — and what it actually takes to earn stability in a
-      skeptical organization.
-    </p>
-
+    <h1 class="post__title">What I learned being the fifth IT leader in six years</h1>
+    <p class="post__lede">In 2005, I joined American University of Sharjah as Director of IT. The organization had seen four IT leaders come and go in the five years before I arrived. I stayed for seven. Here's what I learned about why that happened — and what it actually takes to earn stability in a skeptical organization.</p>
     <div class="post__body">
-
-      <p>
-        When you arrive somewhere that has chewed through leaders at that pace,
-        the organization has already made up its mind about you. Not about you
-        specifically — they haven't met you yet. They've decided about the role.
-        They've decided that whoever sits in it will eventually disappoint them,
-        leave, or both. Your first job isn't to prove competence. It's to
-        disrupt that narrative — quietly, and over time.
-      </p>
+      <p>When you arrive somewhere that has chewed through leaders at that pace, the organization has already made up its mind about you. Not about you specifically — they haven't met you yet. They've decided about the role. They've decided that whoever sits in it will eventually disappoint them, leave, or both. Your first job isn't to prove competence. It's to disrupt that narrative — quietly, and over time.</p>
 
       <h2>The instinct that gets you fired</h2>
 
-      <p>
-        Most leaders who walk into broken organizations make the same mistake:
-        they come in with a plan. They've assessed the situation from the outside,
-        they know what needs to change, and they want to get moving. This is
-        understandable. It's also almost always wrong.
-      </p>
+      <p>Most leaders who walk into broken organizations make the same mistake: they come in with a plan. They've assessed the situation from the outside, they know what needs to change, and they want to get moving. This is understandable. It's also almost always wrong.</p>
 
-      <p>
-        The people inside that organization don't trust the plan. They've seen
-        plans before. They've seen leaders arrive with energy and ideas and
-        a 90-day roadmap, and then watched those leaders lose interest, clash
-        with the culture, or simply fail to understand what the organization
-        actually needed. The plan isn't the problem. The problem is that trust
-        hasn't been earned yet, and without trust, even the right plan fails.
-      </p>
+      <p>The people inside that organization don't trust the plan. They've seen plans before. They've seen leaders arrive with energy and ideas and a 90-day roadmap, and then watched those leaders lose interest, clash with the culture, or simply fail to understand what the organization actually needed. The plan isn't the problem. The problem is that trust hasn't been earned yet, and without trust, even the right plan fails.</p>
 
       <blockquote>
-        The first thing I did in Sharjah was nothing. I listened for sixty days
-        before I made a single structural change.
+        The first thing I did in Sharjah was nothing. I listened for sixty days before I made a single structural change.
       </blockquote>
 
-      <p>
-        I talked to the President. The Provost. Every Vice Chancellor. Faculty
-        who'd been there for decades. Students. The IT staff who'd survived five
-        leadership transitions. I wanted to understand what had actually gone
-        wrong before — not the official version, but the real one. What had
-        each leader tried to change? What had they gotten right? What had the
-        organization rejected, and why?
-      </p>
+      <p>I talked to the Chancellor. The Provost. Every Vice Chancellor. Faculty who'd been there for years. Students. The IT staff who'd survived leadership transitions. I wanted to understand what had actually gone wrong before — not the official version, but the real one. What had each leader tried to change? What had they gotten right? What had the organization rejected, and why?</p>
 
       <h2>What I found out</h2>
 
-      <p>
-        Every previous leader had prioritized technology over people. They'd
-        arrived wanting to modernize systems, upgrade infrastructure, implement
-        new platforms. These were real needs — the infrastructure was genuinely
-        outdated. But they'd treated the people in the organization as obstacles
-        to the technology plan rather than as the reason technology existed.
-      </p>
+      <p>Every previous leader had prioritized technology or process over people. They'd arrived wanting to modernize systems, upgrade infrastructure, implement new platforms. These were real needs — the infrastructure was genuinely insufficient. But they'd treated the people in the organization as obstacles to the technology plan rather than as the reason technology existed.</p>
 
-      <p>
-        The faculty didn't trust IT because IT had repeatedly rolled out systems
-        that didn't fit how they worked. The IT staff felt like order-takers
-        rather than professionals. The executive team saw technology as a cost
-        center, not a partner, because every IT leader had spoken in features
-        and infrastructure rather than in outcomes and mission.
-      </p>
+      <p>The faculty and students didn't trust IT because IT had repeatedly rolled out systems that didn't fit how they worked. The IT staff felt like order-takers rather than professionals. The executive team saw technology as a cost center, not a partner, because every IT leader had spoken in features and infrastructure rather than in outcomes and mission.</p>
 
       <h2>The work of earning trust</h2>
 
-      <p>
-        Trust in organizations is built through small, kept promises — not
-        big visions. I spent the first year fixing things that annoyed people.
-        Faculty complained that the email system was slow and unreliable. We
-        fixed it. The wireless network had dead zones across campus. We mapped
-        them and resolved them. The helpdesk response time was poor.
-        We redesigned it.
-      </p>
+      <p>Trust in organizations is built through small, kept promises — not big visions. I spent the first year fixing things that annoyed people. Faculty complained that the email system was slow and unreliable. We fixed it. The wireless network had dead zones across campus. We mapped them and resolved them. The helpdesk response time was poor. We redesigned it. We had been prioritizing administrative services and availability. We delivered improvements students and faculty needed.</p>
 
-      <p>
-        None of these were glamorous. None of them showed up in a strategic plan.
-        But each one was a signal: <strong>we do what we say we'll do.</strong>
-        That signal, repeated consistently over months, is what eventually unlocks
-        the larger trust you need to make structural changes.
-      </p>
+      <p>None of these were glamorous. None of them showed up in a strategic plan. But each one was a signal: we do what we say we'll do. That signal, repeated consistently over months, is what eventually unlocks the larger trust you need to make structural changes.</p>
 
-      <p>
-        By year two, the faculty were coming to us with ideas. By year three,
-        we were being invited into conversations about academic technology that
-        would have been unthinkable in the previous leadership's tenure. By year
-        five, I was on the executive advisory board alongside the President and
-        Provost — not because I had lobbied for the seat, but because the
-        organization had decided technology leadership belonged in that room.
-      </p>
+      <p>By the start of year two, the faculty were coming to us with ideas. By the end of the second year, we were being invited into conversations about academic technology that would have been unthinkable in the previous leadership's tenure. By year five, I was involved with campus planning and academic advancement initiatives — not because I had lobbied for the seat, but because the organization had decided technology leadership belonged in that room.</p>
 
       <h2>What this means for advisory work</h2>
 
-      <p>
-        I think about this experience often when I work with organizations on
-        technology transformation. The instinct is always to start with the
-        technology — the stack, the platforms, the roadmap. Those things matter.
-        But they are downstream of something more foundational: whether the
-        people in the organization believe that the technology function is on
-        their side.
-      </p>
+      <p>I think about this experience often when I work with organizations on technology transformation. The instinct is always to start with the technology — the stack, the platforms, the roadmap. Those things matter. But they are downstream of something more foundational: whether the people in the organization believe that the technology function is on their side.</p>
 
-      <p>
-        The fastest path to a failed transformation isn't bad technology choices.
-        It's an IT organization that has lost the trust of the business it serves.
-        And rebuilding that trust is slower work than any platform migration, but
-        it's the only work that actually holds.
-      </p>
+      <p>The fastest path to a failed transformation isn't bad technology choices. It's an IT organization that has lost the trust of the business it serves. And rebuilding that trust is slower work than any platform migration, but it's the only work that actually holds.</p>
 
-      <p>
-        The sixth leader stayed because he stopped trying to be a technology
-        leader first. He became a listener, a promise-keeper, and a builder of
-        the kind of quiet credibility that organizations extend to people who've
-        earned it. The technology came later — and when it did, it stuck.
-      </p>
+      <p>The fifth leader stayed because he stopped trying to be a technology leader first. He became a listener, a promise-keeper, and a builder of the kind of quiet credibility that organizations extend to people who've earned it. The technology came later — and when it did, it stuck.</p>
 
     </div>
-
     <div class="post__footer">
       <a class="post__footer-back" href="../writing.html">All writing</a>
       <div class="post__author">
@@ -317,13 +117,10 @@
         <div class="post__author-role">Technology Advisor</div>
       </div>
     </div>
-
   </article>
-
   <footer class="footer">
     <span class="footer__left">Ashi Sheth · Writing</span>
     <span class="footer__right"><a href="../ashi-sheth.html">ashisheth.com</a></span>
   </footer>
-
 </body>
 </html>
